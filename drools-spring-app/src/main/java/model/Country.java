@@ -8,17 +8,19 @@ public class Country implements Serializable {
 	private String countryName;
 	private double idvIndex;
 	private boolean covidPositive;
+	private boolean lowIdvIndex;
 	
 	public Country() {
 		
 	}
 
-	public Country(long id, String countryName, double idvIndex, boolean covidPositive) {
+	public Country(long id, String countryName, double idvIndex, boolean covidPositive, boolean lowIdvIndex) {
 		super();
 		this.id = id;
 		this.countryName = countryName;
 		this.idvIndex = idvIndex;
 		this.covidPositive = covidPositive;
+		this.lowIdvIndex = lowIdvIndex;
 	}
 
 	public long getId() {
@@ -53,48 +55,13 @@ public class Country implements Serializable {
 		this.covidPositive = covidPositive;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((countryName == null) ? 0 : countryName.hashCode());
-		result = prime * result + (covidPositive ? 1231 : 1237);
-		result = prime * result + (int) (id ^ (id >>> 32));
-		long temp;
-		temp = Double.doubleToLongBits(idvIndex);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
+	public boolean isLowIdvIndex() {
+		return lowIdvIndex;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Country other = (Country) obj;
-		if (countryName == null) {
-			if (other.countryName != null)
-				return false;
-		} else if (!countryName.equals(other.countryName))
-			return false;
-		if (covidPositive != other.covidPositive)
-			return false;
-		if (id != other.id)
-			return false;
-		if (Double.doubleToLongBits(idvIndex) != Double.doubleToLongBits(other.idvIndex))
-			return false;
-		return true;
+	public void setLowIdvIndex(boolean lowIdvIndex) {
+		this.lowIdvIndex = lowIdvIndex;
 	}
 
-	@Override
-	public String toString() {
-		return "Country [id=" + id + ", countryName=" + countryName + ", idvIndex=" + idvIndex + ", covidPositive="
-				+ covidPositive + "]";
-	}
-	
-	
 	
 }

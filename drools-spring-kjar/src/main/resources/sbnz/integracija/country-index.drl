@@ -1,0 +1,11 @@
+package sbnz.integracija;
+
+import model.Country;
+
+rule "low IDV index country"
+	when
+		$c: Country ( idvIndex < 0.3)
+	then
+		$c.setLowIdvIndex(true);
+		update($c);
+end
