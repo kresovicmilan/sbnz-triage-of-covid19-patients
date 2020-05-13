@@ -1,5 +1,7 @@
 package sbnz.integracija.example;
 
+import java.util.ArrayList;
+
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -41,6 +43,16 @@ public class testApp {
 		int fired = kSession.fireAllRules();
 		p.setCountry(c);
 		p.setLastFever(36.8);
+		
+		Patient p2 = new Patient();
+		Patient p3 = new Patient();
+		Patient p4 = new Patient();
+		
+		p.setContactedPatients(new ArrayList<>());
+		
+		p.getContactedPatients().add(p2);
+		p.getContactedPatients().add(p3);
+		p.getContactedPatients().add(p4);
 		
 		
 		System.out.println("DEVELOMPENT: " + p.getCountry().getCountryDevelopmentLevel());
