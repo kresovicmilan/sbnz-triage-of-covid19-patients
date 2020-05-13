@@ -26,6 +26,7 @@ public class Patient implements Serializable{
 	private boolean tachnypnea;
 	private double alc; //apsolute lymphocite count
 	private boolean pneumonia;
+	private String curingMeasures;
 	
 	public Patient() {
 		
@@ -165,6 +166,14 @@ public class Patient implements Serializable{
 
 	public void setPneumonia(boolean pneumonia) {
 		this.pneumonia = pneumonia;
+	}
+
+	public String getCuringMeasures() {
+		return curingMeasures;
+	}
+
+	public void setCuringMeasures(String curingMeasures) {
+		this.curingMeasures = curingMeasures;
 	}
 	
 	
