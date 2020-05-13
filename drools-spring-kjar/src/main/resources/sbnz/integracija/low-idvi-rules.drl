@@ -3,7 +3,7 @@ package sbnz.integracija;
 import model.Patient;
 import model.Country;
 
-rule "Patient did not have high fever"
+rule "Patient did not have high fever - LOW"
 	when
 		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -11,14 +11,14 @@ rule "Patient did not have high fever"
 		update($p);
 end
 
-rule "Patient had high fever"
+rule "Patient had high fever - LOW"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		update($p);
 end
 
-rule "Patient does not have cough"
+rule "Patient does not have cough - LOW"
 	when
 		$p: Patient(cough == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -26,7 +26,7 @@ rule "Patient does not have cough"
 		update($p);
 end
 
-rule "Patient has cough"
+rule "Patient has cough - LOW"
 	when
 		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -34,7 +34,7 @@ rule "Patient has cough"
 end
 
 
-rule "Patient did not have contact with positive COVID-19 case within last 14 days"
+rule "Patient did not have contact with positive COVID-19 case within last 14 days - LOW"
 	when
 		$p: Patient(covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -42,7 +42,7 @@ rule "Patient did not have contact with positive COVID-19 case within last 14 da
 		update($p);
 end
 
-rule "Patient has Tachypnea"
+rule "Patient has Tachypnea - LOW"
 	when
 		$p: Patient(respiratoryRate > 20, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -50,7 +50,7 @@ rule "Patient has Tachypnea"
 		update($p);
 end
 
-rule "Patient has Hypoxia"
+rule "Patient has Hypoxia - LOW"
 	when
 		$p: Patient(oxygenSaturation < 93, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -59,7 +59,7 @@ rule "Patient has Hypoxia"
 end
 		
 
-rule "Patient had contact with positive COVID-19 case within last 14 days"
+rule "Patient had contact with positive COVID-19 case within last 14 days - LOW"
 	when
 		$p: Patient(covidPositiveContact == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -67,7 +67,7 @@ rule "Patient had contact with positive COVID-19 case within last 14 days"
 		update($p);
 end
 
-rule "Patient had contact with positive COVID-19 case within last 14 days - reevaluation"
+rule "Patient had contact with positive COVID-19 case within last 14 days - reevaluation - LOW"
 	when
 		$p: Patient($patients: contactedPatients, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 		Number(intValue > 0) from accumulate(
@@ -85,7 +85,7 @@ rule "Patient had contact with positive COVID-19 case within last 14 days - reev
 		update($p);
 end
 
-rule "Patient visited country that has covid cases - reevaluation"
+rule "Patient visited country that has covid cases - reevaluation - LOW"
 	when
 		$p: Patient($countries: countriesVisited, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 		Number(intValue > 0) from accumulate(
