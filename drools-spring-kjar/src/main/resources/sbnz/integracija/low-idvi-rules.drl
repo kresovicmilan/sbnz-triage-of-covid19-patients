@@ -43,8 +43,5 @@ rule "Patient did not have contact with positive COVID-19 case within last 14 da
 		update($p);
 end
 
-rule "Patient visited countries that are COVID-19 positive"
-	
 
-end
 
