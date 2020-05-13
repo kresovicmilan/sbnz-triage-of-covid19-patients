@@ -15,15 +15,6 @@ rule "Patient had high fever"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
-		update($p);
-end
-
-rule "Patient has cough"
-	when
-		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
-	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
 
@@ -34,6 +25,14 @@ rule "Patient does not have cough"
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		update($p);
 end
+
+rule "Patient has cough"
+	when
+		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		update($p);
+end
+
 
 rule "Patient did not have contact with positive COVID-19 case within last 14 days"
 	when
@@ -85,7 +84,5 @@ rule "Patient visited country that has covid cases - reevaluation"
 		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
-
-
 
 

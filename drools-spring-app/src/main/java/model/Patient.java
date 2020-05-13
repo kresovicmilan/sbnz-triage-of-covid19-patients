@@ -31,6 +31,7 @@ public class Patient implements Serializable{
 	private double alc; //apsolute lymphocite count
 	private boolean pneumonia;
 	private CovidStatus covidStatus;
+	private String curingMeasures;
 	
 	public Patient() {
 		
@@ -179,5 +180,14 @@ public class Patient implements Serializable{
 	public void setCovidStatus(CovidStatus covidStatus) {
 		this.covidStatus = covidStatus;
 	}
+	
+	public String getCuringMeasures() {
+		return curingMeasures;
+	}
+
+	public void setCuringMeasures(String curingMeasures) {
+		this.curingMeasures = curingMeasures;
+	}
+
 	
 }
