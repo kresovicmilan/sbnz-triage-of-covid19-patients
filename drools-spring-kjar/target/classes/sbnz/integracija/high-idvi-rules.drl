@@ -34,7 +34,7 @@ rule "Patient has dyspnea-high"
 	when
 		$p: Patient(dyspnea == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures + "Mera 4");
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4");
 		update($p);
 end
 
@@ -64,7 +64,7 @@ rule "Patient has hypoxia-high"
 	when
 		$p: Patient(hypoxia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures + "Mera 4");
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4");
 		update($p);
 end
 
@@ -78,7 +78,7 @@ rule "Patient did not have high fever-high"
 	when
 		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures + " Mera 1");
+		$p.setCuringMeasures($p.getCuringMeasures() + " Mera 1");
 		update($p);
 end
 
