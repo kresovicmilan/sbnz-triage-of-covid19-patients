@@ -1,6 +1,7 @@
 package sbnz.integracija.example;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
@@ -37,30 +38,33 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
-		Patient p = new Patient();
-		Country c = new Country(1l, "Serbia", false, 0.24);
+		Patient p1 = new Patient();
+		Country c = new Country(1l, "Serbia", true, 0.24);
 		kSession.insert(c);
 		int fired = kSession.fireAllRules();
-		p.setCountry(c);
-		p.setLastFever(36.8);
+		p1.setCountry(c);
+		p1.setLastFever(36.8);
+		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		
 		Patient p2 = new Patient();
-		Patient p3 = new Patient();
-		Patient p4 = new Patient();
+		p2.setCountry(c);
+		p2.setLastFever(37);
+		p2.setCovidPositiveContact(false);
+		List<Patient> contacted = new ArrayList<>();
+		List<Country> countries = new ArrayList<>();
+		contacted.add(p1);
+		countries.add(c);
+		p2.setContactedPatients(contacted);
+		p2.setCountriesVisited(countries);
 		
-		p.setContactedPatients(new ArrayList<>());
-		
-		p.getContactedPatients().add(p2);
-		p.getContactedPatients().add(p3);
-		p.getContactedPatients().add(p4);
-		
-		
-		System.out.println("DEVELOMPENT: " + p.getCountry().getCountryDevelopmentLevel());
-		System.out.println("FEVER: " + p.getLastFever());
-		kSession.insert(p);
+		System.out.println("DEVELOMPENT: " + p1.getCountry().getCountryDevelopmentLevel());
+		System.out.println("FEVER: " + p1.getLastFever());
+		kSession.insert(p1);
+		kSession.insert(p2);
 		fired = kSession.fireAllRules();
 		System.out.println("PUCANA PRAVILA: " + fired);
-		System.out.println("RISK: " + p.getRiskOfCovid());
+		System.out.println("RISK p1: " + p1.getRiskOfCovid());
+		System.out.println("RISK p2: " + p2.getRiskOfCovid());
 	}
 
 }

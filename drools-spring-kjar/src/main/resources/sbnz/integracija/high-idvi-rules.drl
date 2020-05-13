@@ -1,0 +1,89 @@
+package sbnz.integracija;
+
+import model.Patient;
+import model.Country;
+
+
+rule "Patient does not have cough, fever and sore throat"
+	when
+		$p: Patient(cough == false, lastFever <= 37.3, soreThroat == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setRiskOfCovid(Patient.Risk.LOW);
+		update($p);
+end
+
+rule "Patient has cough"
+	when
+		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end
+
+rule "Patient has fever"
+	when
+		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end
+
+rule "Patient has sore throat"
+	when
+		$p: Patient(soreThroat == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end
+
+rule "Patient has dyspnea"
+	when
+		$p: Patient(dyspnea == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures + "Mera 4");
+		update($p);
+end
+
+rule "Patient does not have dyspnea"
+	when
+		$p: Patient(dyspnea == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end
+
+rule "Patient hypoxia check true"
+	when
+		$p: Patient(oxygenSaturation >93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHypoxia(true);
+		update($p);
+end
+
+rule "Patient hypoxia check false"
+	when
+		$p: Patient(oxygenSaturation <=93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHypoxia(false);
+		update($p);
+end
+
+rule "Patient has hypoxia"
+	when
+		$p: Patient(hypoxia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures + "Mera 4");
+		update($p);
+end
+
+rule "Patient does not have hypoxia"
+	when
+		$p: Patient(hypoxia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end
+
+rule "Patient did not have high fever"
+	when
+		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures + " Mera 1");
+		update($p);
+end
+
+rule "Patient had high fever"
+	when
+		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+end

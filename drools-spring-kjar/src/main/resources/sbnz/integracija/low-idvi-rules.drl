@@ -15,15 +15,6 @@ rule "Patient had high fever"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
-		update($p);
-end
-
-rule "Patient has cough"
-	when
-		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
-	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
 
@@ -34,6 +25,14 @@ rule "Patient does not have cough"
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		update($p);
 end
+
+rule "Patient has cough"
+	when
+		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		update($p);
+end
+
 
 rule "Patient did not have contact with positive COVID-19 case within last 14 days"
 	when
@@ -56,6 +55,50 @@ rule "Patient has Hypoxia"
 		$p: Patient(oxygenSaturation < 93, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		$p.setHypoxia(true);
+		update($p);
+end
+		
+
+rule "Patient had contact with positive COVID-19 case within last 14 days"
+	when
+		$p: Patient(covidPositiveContact == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
+rule "Patient had contact with positive COVID-19 case within last 14 days - reevaluation"
+	when
+		$p: Patient($patients: contactedPatients, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									covidStatus == Patient.CovidStatus.POSITIVE
+								) from $patients,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		System.out.println("Uso vamo");
+		$p.setCovidPositiveContact(true);
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
+rule "Patient visited country that has covid cases - reevaluation"
+	when
+		$p: Patient($countries: countriesVisited, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		Number(intValue > 0) from accumulate(
+								Country(
+									covidPositive == true
+								) from $countries,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		System.out.println("Uso vamo 2");
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
 
