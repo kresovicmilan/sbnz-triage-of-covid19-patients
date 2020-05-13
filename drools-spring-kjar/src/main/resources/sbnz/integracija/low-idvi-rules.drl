@@ -42,6 +42,23 @@ rule "Patient did not have contact with positive COVID-19 case within last 14 da
 		update($p);
 end
 
+rule "Patient has Tachypnea"
+	when
+		$p: Patient(respiratoryRate > 20, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setTachnypnea(true);
+		update($p);
+end
+
+rule "Patient has Hypoxia"
+	when
+		$p: Patient(oxygenSaturation < 93, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setHypoxia(true);
+		update($p);
+end
+		
+
 rule "Patient had contact with positive COVID-19 case within last 14 days"
 	when
 		$p: Patient(covidPositiveContact == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)

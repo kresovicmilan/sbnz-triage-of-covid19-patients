@@ -23,19 +23,34 @@ public class Patient implements Serializable{
 	private List<Patient> contactedPatients;
 	private List<Country> countriesVisited;
 	private int respiratoryRate; //u zavisnosti od respiratory rate-a, racunace se tachnypnea u pravilima
-	private double hypoxia;
+	private boolean hypoxia;
 	private boolean soreThroat;
 	private boolean cough;
 	private boolean dyspnea;
 	private boolean tachnypnea;
 	private double alc; //apsolute lymphocite count
 	private boolean pneumonia;
+	private double oxygenSaturation;
 	private CovidStatus covidStatus;
 	private String curingMeasures;
 	
 	public Patient() {
 		
 	}
+	
+	
+
+	public double getOxygenSaturation() {
+		return oxygenSaturation;
+	}
+
+
+
+	public void setOxygenSaturation(double oxygenSaturation) {
+		this.oxygenSaturation = oxygenSaturation;
+	}
+
+
 
 	public long getId() {
 		return id;
@@ -117,11 +132,11 @@ public class Patient implements Serializable{
 		this.respiratoryRate = respiratoryRate;
 	}
 
-	public double getHypoxia() {
+	public boolean getHypoxia() {
 		return hypoxia;
 	}
 
-	public void setHypoxia(double hypoxia) {
+	public void setHypoxia(boolean hypoxia) {
 		this.hypoxia = hypoxia;
 	}
 
