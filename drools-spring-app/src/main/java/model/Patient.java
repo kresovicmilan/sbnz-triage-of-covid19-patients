@@ -8,7 +8,11 @@ public class Patient implements Serializable{
 	public enum Risk {
         LOW, HIGH, UNKNOWN
     };
-
+    
+    public enum CovidStatus {
+        POSITIVE, NEGATIVE, UNKNOWN
+    };
+    
 	private long id;
 	private String name;
 	private String lastname;
@@ -26,6 +30,7 @@ public class Patient implements Serializable{
 	private boolean tachnypnea;
 	private double alc; //apsolute lymphocite count
 	private boolean pneumonia;
+	private CovidStatus covidStatus;
 	
 	public Patient() {
 		
@@ -166,7 +171,13 @@ public class Patient implements Serializable{
 	public void setPneumonia(boolean pneumonia) {
 		this.pneumonia = pneumonia;
 	}
-	
-	
+
+	public CovidStatus getCovidStatus() {
+		return covidStatus;
+	}
+
+	public void setCovidStatus(CovidStatus covidStatus) {
+		this.covidStatus = covidStatus;
+	}
 	
 }
