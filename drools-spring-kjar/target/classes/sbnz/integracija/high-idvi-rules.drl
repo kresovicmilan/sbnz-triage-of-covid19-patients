@@ -4,7 +4,7 @@ import model.Patient;
 import model.Country;
 
 
-rule "Patient does not have cough, fever and sore throat"
+rule "Patient does not have cough, fever and sore throat-high"
 	when
 		$p: Patient(cough == false, lastFever <= 37.3, soreThroat == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -12,25 +12,25 @@ rule "Patient does not have cough, fever and sore throat"
 		update($p);
 end
 
-rule "Patient has cough"
+rule "Patient has cough-high"
 	when
 		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
 
-rule "Patient has fever"
+rule "Patient has fever-high"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
 
-rule "Patient has sore throat"
+rule "Patient has sore throat-high"
 	when
 		$p: Patient(soreThroat == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
 
-rule "Patient has dyspnea"
+rule "Patient has dyspnea-high"
 	when
 		$p: Patient(dyspnea == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -38,13 +38,13 @@ rule "Patient has dyspnea"
 		update($p);
 end
 
-rule "Patient does not have dyspnea"
+rule "Patient does not have dyspnea-high"
 	when
 		$p: Patient(dyspnea == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
 
-rule "Patient hypoxia check true"
+rule "Patient hypoxia check true-high"
 	when
 		$p: Patient(oxygenSaturation >93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -52,7 +52,7 @@ rule "Patient hypoxia check true"
 		update($p);
 end
 
-rule "Patient hypoxia check false"
+rule "Patient hypoxia check false-high"
 	when
 		$p: Patient(oxygenSaturation <=93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -60,7 +60,7 @@ rule "Patient hypoxia check false"
 		update($p);
 end
 
-rule "Patient has hypoxia"
+rule "Patient has hypoxia-high"
 	when
 		$p: Patient(hypoxia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -68,13 +68,13 @@ rule "Patient has hypoxia"
 		update($p);
 end
 
-rule "Patient does not have hypoxia"
+rule "Patient does not have hypoxia-high"
 	when
 		$p: Patient(hypoxia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
 
-rule "Patient did not have high fever"
+rule "Patient did not have high fever-high"
 	when
 		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
@@ -82,7 +82,7 @@ rule "Patient did not have high fever"
 		update($p);
 end
 
-rule "Patient had high fever"
+rule "Patient had high fever-high"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
