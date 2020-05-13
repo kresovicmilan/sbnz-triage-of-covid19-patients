@@ -1,20 +1,50 @@
 package sbnz.integracija;
 
 import model.Patient;
+import model.Country;
 
-rule "Patient has fever"
+rule "Patient did not have high fever"
 	when
-		$p: Patient(lastFever < 37.3)
+		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		update($p);
 end
 
+rule "Patient had high fever"
+	when
+		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
 rule "Patient has cough"
 	when
-		$p: Patient(cough == false)
+		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
+rule "Patient does not have cough"
+	when
+		$p: Patient(cough == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		update($p);
+end
+
+rule "Patient did not have contact with positive COVID-19 case within last 14 days"
+	when
+		$p: Patient(covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setRiskOfCovid(Patient.Risk.LOW);
+		update($p);
+end
+
+rule "Patient visited countries that are COVID-19 positive"
+	
+
 end
 

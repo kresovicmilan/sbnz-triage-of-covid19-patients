@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class User implements Serializable{
 	
+	private long id;
 	private String username;
 	private String password;
 	private int role; //1 => lekar, 2 => administrator
@@ -12,11 +13,22 @@ public class User implements Serializable{
 		
 	}
 
-	public User(String username, String password, int role) {
+	public User(long id, String username, String password, int role) {
 		super();
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.role = role;
+	}
+	
+	
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -47,6 +59,7 @@ public class User implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + role;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -62,6 +75,8 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (id != other.id)
+			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -79,8 +94,9 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
+
 	
 	
 

@@ -12,6 +12,7 @@ public class Patient implements Serializable{
 	private long id;
 	private String name;
 	private String lastname;
+	private Country country; //dodao
 	private boolean covidPositiveContact;
 	private double lastFever;
 	private Risk riskOfCovid;
@@ -28,27 +29,6 @@ public class Patient implements Serializable{
 	
 	public Patient() {
 		
-	}
-
-	public Patient(long id, String name, String lastname, boolean covidPositiveContact, double lastFever,
-			List<Patient> contactedPatients, List<Country> countriesVisited, int respiratoryRate, double hypoxia,
-			boolean soreThroat, boolean cough, boolean dyspnea, boolean tachnypnea, double alc, boolean pneumonia) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.lastname = lastname;
-		this.covidPositiveContact = covidPositiveContact;
-		this.lastFever = lastFever;
-		this.contactedPatients = contactedPatients;
-		this.countriesVisited = countriesVisited;
-		this.respiratoryRate = respiratoryRate;
-		this.hypoxia = hypoxia;
-		this.soreThroat = soreThroat;
-		this.cough = cough;
-		this.dyspnea = dyspnea;
-		this.tachnypnea = tachnypnea;
-		this.alc = alc;
-		this.pneumonia = pneumonia;
 	}
 
 	public long getId() {
@@ -73,6 +53,14 @@ public class Patient implements Serializable{
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public boolean isCovidPositiveContact() {
@@ -178,6 +166,7 @@ public class Patient implements Serializable{
 	public void setPneumonia(boolean pneumonia) {
 		this.pneumonia = pneumonia;
 	}
-
+	
+	
 	
 }

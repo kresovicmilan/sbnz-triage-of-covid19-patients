@@ -2,10 +2,18 @@ package sbnz.integracija;
 
 import model.Country;
 
-rule "low IDV index country"
+rule "Low IDV index country"
 	when
-		$c: Country ( idvIndex < 0.3)
+		$c: Country (idvIndex < 0.3, countryDevelopmentLevel == Country.DevelompentLevel.UNKNOWN )
 	then
-		$c.setLowIdvIndex(true);
+		$c.setCountryDevelopmentLevel(Country.DevelompentLevel.LOW);
+		update($c);
+end
+
+rule "High IDV index country"
+	when
+		$c: Country (idvIndex > 0.3, countryDevelopmentLevel == Country.DevelompentLevel.UNKNOWN )
+	then
+		$c.setCountryDevelopmentLevel(Country.DevelompentLevel.HIGH);
 		update($c);
 end
