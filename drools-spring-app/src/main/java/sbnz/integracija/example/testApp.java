@@ -65,6 +65,8 @@ public class testApp {
 		System.out.println("PUCANA PRAVILA: " + fired);
 		System.out.println("RISK p1: " + p1.getRiskOfCovid());
 		System.out.println("RISK p2: " + p2.getRiskOfCovid());
+		System.out.println("CURING MEASSURES p1:\n" + p1.getCuringMeasures());
+		System.out.println("CURING MEASSURES p2:\n" + p2.getCuringMeasures());
 	}
 
 }

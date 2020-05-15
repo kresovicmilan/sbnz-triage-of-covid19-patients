@@ -8,6 +8,7 @@ rule "Patient did not have high fever - LOW"
 		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nMali rizik COVID-19");
 		update($p);
 end
 
@@ -23,6 +24,7 @@ rule "Patient does not have cough - LOW"
 		$p: Patient(cough == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nMali rizik COVID-19");
 		update($p);
 end
 
@@ -34,36 +36,48 @@ rule "Patient has cough - LOW"
 end
 
 
-rule "Patient did not have contact with positive COVID-19 case within last 14 days - LOW"
+rule "Patient has fever but did not have contact with positive COVID-19 case within last 14 days - LOW"
 	when
-		$p: Patient(covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		$p: Patient(covidPositiveContact == false,
+		 			country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+		 			lastFever > 37.3)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nMali rizik COVID-19");
 		update($p);
 end
 
-rule "Patient has Tachypnea - LOW"
+rule "Patient has cough but did not have contact with positive COVID-19 case within last 14 days - LOW"
 	when
-		$p: Patient(respiratoryRate > 20, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		$p: Patient(covidPositiveContact == false,
+		 			country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+		 			cough == true)
 	then
-		$p.setTachnypnea(true);
-		update($p);
-end
-
-rule "Patient has Hypoxia - LOW"
-	when
-		$p: Patient(oxygenSaturation < 93, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
-	then
-		$p.setHypoxia(true);
+		$p.setRiskOfCovid(Patient.Risk.LOW);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nMali rizik COVID-19");
 		update($p);
 end
 		
 
-rule "Patient had contact with positive COVID-19 case within last 14 days - LOW"
+rule "Patient has fever and had contact with positive COVID-19 case within last 14 days - LOW"
 	when
-		$p: Patient(covidPositiveContact == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		$p: Patient(covidPositiveContact == true,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+					lastFever > 37.3)
 	then
 		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nSlucaj pod istragom + izolacija");
+		update($p);
+end
+
+rule "Patient has cough and had contact with positive COVID-19 case within last 14 days - LOW"
+	when
+		$p: Patient(covidPositiveContact == true,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+					cough == true)
+	then
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nSlucaj pod istragom + izolacija");
 		update($p);
 end
 
@@ -101,5 +115,75 @@ rule "Patient visited country that has covid cases - reevaluation - LOW"
 		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
+
+rule "Patient has Tachypnea - LOW"
+	when
+		$p: Patient(respiratoryRate > 20,
+		 	country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+		 	riskOfCovid == Patient.Risk.HIGH)
+	then
+		$p.setTachnypnea(true);
+		$p.setShouldDoCovidTest(true);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nSuplementacioni kiseonik + Nazofaringealni bris");
+		update($p);
+end
+
+rule "Patient does not have Tachypnea - LOW"
+	when
+		$p: Patient(respiratoryRate <= 20,
+		 	country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+		 	riskOfCovid == Patient.Risk.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nNazofaringealni bris");
+		$p.setShouldDoCovidTest(true);
+		update($p);
+end
+
+rule "Patient has Hypoxia - LOW"
+	when
+		$p: Patient(oxygenSaturation < 93,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+					riskOfCovid == Patient.Risk.HIGH)
+	then
+		$p.setHypoxia(true);
+		$p.setShouldDoCovidTest(true);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nSuplementacioni kiseonik + Nazofaringealni bris");
+		update($p);
+end
+
+rule "Patient does not have Hypoxia - LOW"
+	when
+		$p: Patient(oxygenSaturation >= 93,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+					riskOfCovid == Patient.Risk.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nNazofaringealni bris");
+		$p.setShouldDoCovidTest(true);
+		update($p);
+end
+
+rule "Patient should do test - test is POSITIVE - LOW"
+	when
+		$p: Patient(shouldDoCovidTest == true,
+					testPositive == true,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setCovidStatus(Patient.CovidStatus.POSITIVE);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nPrijem u predvidjeno odeljenje za podrzavajucu negu");
+		update($p);
+end
+
+rule "Patient should do test - test is NEGATIVE - LOW"
+	when
+		$p: Patient(shouldDoCovidTest == true,
+					testPositive == false,
+					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setCovidStatus(Patient.CovidStatus.NEGATIVE);
+		$p.setCuringMeasures($p.getCuringMeasures() + "\nRazmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana");
+		update($p);
+end
+		
+		
 
 
