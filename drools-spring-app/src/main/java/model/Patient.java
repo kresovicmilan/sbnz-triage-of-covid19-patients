@@ -34,56 +34,39 @@ public class Patient implements Serializable{
 	private CovidStatus covidStatus;
 	private String curingMeasures;
 	private boolean shouldDoCovidTest;
-	private boolean testPositive;
+	private CovidStatus testResults;
 	
 	public Patient() {
 		this.curingMeasures = "";
 		this.shouldDoCovidTest = false;
-		this.testPositive = false;
+		this.testResults = CovidStatus.UNKNOWN;
 	}
 	
 	
-	
-
-	public boolean isTestPositive() {
-		return testPositive;
+	public CovidStatus getTestResults() {
+		return testResults;
 	}
 
-
-
-
-	public void setTestPositive(boolean testPositive) {
-		this.testPositive = testPositive;
+	public void setTestResults(CovidStatus testResults) {
+		this.testResults = testResults;
 	}
-
-
-
 
 	public boolean isShouldDoCovidTest() {
 		return shouldDoCovidTest;
 	}
 
-
-
-
 	public void setShouldDoCovidTest(boolean shouldDoCovidTest) {
 		this.shouldDoCovidTest = shouldDoCovidTest;
 	}
-
-
-
 
 	public double getOxygenSaturation() {
 		return oxygenSaturation;
 	}
 
 
-
 	public void setOxygenSaturation(double oxygenSaturation) {
 		this.oxygenSaturation = oxygenSaturation;
 	}
-
-
 
 	public long getId() {
 		return id;
@@ -234,6 +217,12 @@ public class Patient implements Serializable{
 	}
 
 	public void setCuringMeasures(String curingMeasures) {
+//		if(this.curingMeasures.contains("Suplementacioni kiseonik + Nazofaringealni bris")) {
+//			return;
+//		}
+//		if(this.curingMeasures.contains("Nazofaringealni bris")) {
+//			return;
+//		}
 		this.curingMeasures = curingMeasures;
 	}
 

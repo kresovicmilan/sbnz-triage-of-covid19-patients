@@ -54,7 +54,7 @@ rule "Patient has fever and had contact with positive COVID-19 case within last 
 					lastFever > 37.3)
 	then
 		$p.setRiskOfCovid(Patient.Risk.HIGH);
-		$p.setCuringMeasures($p.getCuringMeasures() + "\nSlucaj pod istragom + izolacija");
+		$p.setCuringMeasures("\nSlucaj pod istragom + izolacija");
 		myLogger.log("Patient has fever and had contact with positive COVID-19 case within last 14 days - LOW " + $p.getName());
 		update($p);
 end
@@ -67,7 +67,7 @@ rule "Patient has cough and had contact with positive COVID-19 case within last 
 					cough == true)
 	then
 		$p.setRiskOfCovid(Patient.Risk.HIGH);
-		$p.setCuringMeasures($p.getCuringMeasures() + "\nSlucaj pod istragom + izolacija");
+		$p.setCuringMeasures("\nSlucaj pod istragom + izolacija");
 		myLogger.log("Patient has cough and had contact with positive COVID-19 case within last 14 days - LOW " + $p.getName());
 		update($p);
 end
@@ -123,7 +123,7 @@ rule "Patient did not have contact with positive COVID-19 case within last 14 da
 							)
 	then
 		myLogger.log("Patient did not have contact with positive COVID-19 case within last 14 days - reevaluation - LOW " + $p.getName());
-		$p.setCovidPositiveContact(true);
+		$p.setCovidPositiveContact(false);
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		update($p);
 end
@@ -155,7 +155,6 @@ rule "Patient has Tachypnea - LOW"
 	then
 		myLogger.log("Patient has Tachypnea - LOW " + $p.getName());
 		$p.setTachnypnea(true);
-		$p.setShouldDoCovidTest(true);
 		$p.setCuringMeasures($p.getCuringMeasures() + "\nSuplementacioni kiseonik + Nazofaringealni bris");
 		update($p);
 end
@@ -169,7 +168,6 @@ rule "Patient does not have Tachypnea - LOW"
 	then
 		myLogger.log("Patient does not have Tachypnea - LOW " + $p.getName());
 		$p.setCuringMeasures($p.getCuringMeasures() + "\nNazofaringealni bris");
-		$p.setShouldDoCovidTest(true);
 		update($p);
 end
 
@@ -182,7 +180,6 @@ rule "Patient has Hypoxia - LOW"
 	then
 		myLogger.log("Patient has Hypoxia - LOW " + $p.getName());
 		$p.setHypoxia(true);
-		$p.setShouldDoCovidTest(true);
 		$p.setCuringMeasures($p.getCuringMeasures() + "\nSuplementacioni kiseonik + Nazofaringealni bris");
 		update($p);
 end
@@ -196,32 +193,29 @@ rule "Patient does not have Hypoxia - LOW"
 	then
 		myLogger.log("Patient does not have Hypoxia - LOW " + $p.getName());
 		$p.setCuringMeasures($p.getCuringMeasures() + "\nNazofaringealni bris");
-		$p.setShouldDoCovidTest(true);
 		update($p);
 end
 
-rule "Patient should do test - test is POSITIVE - LOW"
+rule "Test is positive - LOW"
 	no-loop true
 	when
-		$p: Patient(shouldDoCovidTest == true,
-					testPositive == true,
+		$p: Patient(testResults == Patient.CovidStatus.POSITIVE,
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
-		myLogger.log("Patient should do test - test is POSITIVE - LOW " + $p.getName());
+		myLogger.log("Test is positive - LOW " + $p.getName());
 		$p.setCovidStatus(Patient.CovidStatus.POSITIVE);
-		$p.setCuringMeasures($p.getCuringMeasures() + "\nPrijem u predvidjeno odeljenje za podrzavajucu negu");
+		$p.setCuringMeasures("\nPrijem u predvidjeno odeljenje za podrzavajucu negu");
 		update($p);
 end
 
-rule "Patient should do test - test is NEGATIVE - LOW"
+rule "Test is negative - LOW"
 	no-loop true
 	when
-		$p: Patient(shouldDoCovidTest == true,
-					testPositive == false,
+		$p: Patient(testResults == Patient.CovidStatus.NEGATIVE,
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
-		myLogger.log("Patient should do test - test is NEGATIVE - LOW " + $p.getName());
+		myLogger.log("Test is negative - LOW " + $p.getName());
 		$p.setCovidStatus(Patient.CovidStatus.NEGATIVE);
-		$p.setCuringMeasures($p.getCuringMeasures() + "\nRazmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana");
+		$p.setCuringMeasures("\nRazmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana");
 		update($p);
 end
