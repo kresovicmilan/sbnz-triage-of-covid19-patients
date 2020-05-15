@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.cache.CacheType;
 
 import model.Country;
 import model.Patient;
+import util.MyLogger;
 
 public class testApp {
 
