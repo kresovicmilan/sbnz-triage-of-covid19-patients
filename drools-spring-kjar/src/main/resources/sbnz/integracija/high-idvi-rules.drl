@@ -4,86 +4,201 @@ import model.Patient;
 import model.Country;
 
 
-rule "Patient does not have cough, fever and sore throat-high"
+// PROVERA ZA PREHLADU GRLOBOLJU ILI KASALJ
+// NEMA PREDUSLOVE
+rule "Patient does not have cough, fever and sore throat - HIGH"
 	when
-		$p: Patient(cough == false, lastFever <= 37.3, soreThroat == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(cough == false, cold == false, soreThroat == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
+		$p.setHasColdSoreThroatOrCough(0);
 		update($p);
 end
 
-rule "Patient has cough-high"
+rule "Patient has cough - HIGH"
 	when
 		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
+		$p.setHasColdSoreThroatOrCough(1);
+		update($p);
 end
 
-rule "Patient has fever-high"
+rule "Patient has fever - HIGH"
 	when
-		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(cold == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
+		$p.setHasColdSoreThroatOrCough(1);
+		update($p);
 end
 
-rule "Patient has sore throat-high"
+rule "Patient has sore throat - HIGH"
 	when
 		$p: Patient(soreThroat == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
+		$p.setHasColdSoreThroatOrCough(1);
+		update($p);
 end
+// GOTOVA PROVRA ZA PREHLADU GRLOBOLJU ILI KASALJ
+// AKO IMA BILO KOJI OD SIMPTOMA RADI SE PROVRA ZA DISPNEJU I HIPOKSIJU
+// AKO NEMA SIMPTOME NE RADI SE NISTA VISE
 
-rule "Patient has dyspnea-high"
+
+// PROVERA ZA DISPNEJU I HIPOKSIJU
+// PREDUSLOV DA IMA PREHLADU KASALJ ILI GRLOBOLJU
+rule "Patient does not have dyspnea nor hypoxia - HIGH"
 	when
-		$p: Patient(dyspnea == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasColdSoreThroatOrCough == 1, dyspnea == false, oxygenSaturation <=93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4");
+		$p.setHasDyspneaOrHypoxia(0);
 		update($p);
 end
 
-rule "Patient does not have dyspnea-high"
+rule "Patient has dyspnea - HIGH"
 	when
-		$p: Patient(dyspnea == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasColdSoreThroatOrCough == 1, dyspnea == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-end
-
-rule "Patient hypoxia check true-high"
-	when
-		$p: Patient(oxygenSaturation >93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
-	then
-		$p.setHypoxia(true);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4 zbog dyspnea, moze biti i mera 5(ovaj ispis zbog provere)");
+		$p.setHasDyspneaOrHypoxia(1);
 		update($p);
 end
 
-rule "Patient hypoxia check false-high"
+
+rule "Patient hypoxia check true - HIGH"
 	when
-		$p: Patient(oxygenSaturation <=93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasColdSoreThroatOrCough == 1, oxygenSaturation >93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setHypoxia(false);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4 zbog hypoxia, moze biti i mera 5(ovaj ispis zbog provere)");
+		$p.setHasDyspneaOrHypoxia(1);
+		update($p);
+end
+// GOTOVA PROVERA ZA DISPNEJU I HIPOKSIJU
+// AKO IMA DISPNEJU ILI HIPOKSIJU PREDUZIMA SE MERA LECENJA 4 I RADI SE SARS-CoV2 TEST
+// AKO NEMA RADI SE KOMPLETNA KRVNA SLIKA I PROVERAVA SE TEMPERATURA
+
+
+// PROVERA ZA TEMPERATURU
+// PREDUSLOV DA NEMA NI DISPNEJU NI HIPOKSIJU
+rule "Patient did not have high fever - HIGH"
+	when
+		$p: Patient(hasDyspneaOrHypoxia == 0, lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHasFever(0);
 		update($p);
 end
 
-rule "Patient has hypoxia-high"
+rule "Patient had high fever - HIGH"
 	when
-		$p: Patient(hypoxia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasDyspneaOrHypoxia == 0, lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4");
+		$p.setHasFever(1);
+		update($p);
+end
+// GOTOVA PROVERA ZA TEMPERATURU
+// AKO IMA TEMPERATURU RADI SE CT SKENIRANJE GRUDNOG KOSA I PROVERAVA SE PNEUMONIJA
+// AKO NEMA TEMPERATURU RADI SE PROVERA BROJA LIMFOCITA
+
+
+// PROVERA BROJA LIMFOCITA
+// PREDUSLOV DA NEMA TEMPERATURU
+rule "Patient has low lymphocytes level - HIGH"
+	when
+		$p: Patient(hasFever == 0, lymphocyteCount < 1100, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHasLowLymphocytes(1);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)");
 		update($p);
 end
 
-rule "Patient does not have hypoxia-high"
+rule "Patient has high lymphocytes level - HIGH"
 	when
-		$p: Patient(hypoxia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasFever == 0, lymphocyteCount >= 1100, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
+		$p.setHasLowLymphocytes(0);
+		$p.setRiskOfCovid(Patient.Risk.LOW);
+		update($p);
 end
+// GOTOVA PROVERA ZA BROJ LIMFOCITA
+// AKO IMA MALI BROJ LIMFOCITA MERA 1 I GOTOVA PRAVILA
+// AKO IMA VELIKI BROJ LIMFOCITA MALI RIZIK COVID-a I GOTOVA PRAVILA
 
-rule "Patient did not have high fever-high"
+
+// PROVERA ZA PNEUMONIJU
+// PREDUSLOV DA JE IMAO TEMPERATURU
+rule "Patient has pneumonia - HIGH"
 	when
-		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasFever == 1, pneumonia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-		$p.setCuringMeasures($p.getCuringMeasures() + " Mera 1");
+		$p.setHasPneumonia(1);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 3, moze biti i mera 5(ovaj ispis zbog provere)");
 		update($p);
 end
 
-rule "Patient had high fever-high"
+rule "Patient does not have pneumonia - HIGH"
 	when
-		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasFever == 1, pneumonia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHasPneumonia(0);
+		update($p);
+end	
+// GOTOVA PROVERA ZA PNEUMONIU
+// AKO IMA PNEUMOJIJU MERA 3 I RADI SARS-CoV2 TEST
+// AKO NEMA PNEUMONIJU RADI SE PROVERA ZA VANBOLNICKU PNEUMONIU
+
+
+// PROVERA ZA VANBOLNICKU PNEUMONIJU
+// PREDUSLOV DA NEMA PNEUMONIJU
+rule "Patient has non-hospital pneumonia - HIGH"
+	when	
+		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHasNonHospitalPneumonia(1);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 2, mora biti samo mera 2(ovaj ispis zbog provere)");
+		update($p);
+end
+
+rule "Patient does not have non-hospital pneumonia - HIGH"
+	when	
+		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setHasNonHospitalPneumonia(0);
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)");
+		update($p);
+end
+// GOTOVA PROVERA ZA VANBOLNICKU PNEUMONIJU
+// AKO IMA VANBOLNICKU PNEUMONIJU MERA 2 I KRAJ
+// AKO NEMA VANBOLNCIKU PNEUMONIJU MERA 1 I KRAJ
+
+
+// PROVERA ZA SARS-CoV2
+// PREDUSLOV DA IMA PNEUMONIJU, DISPNEJU ILI HIPOKSIJU
+rule "Patient has dyspnea or hypoxia and is COVID positive - HIGH"
+	when
+		$p: Patient(hasDyspneaOrHypoxia == 1, COVID19Positive == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)");
+		update($p);
+end
+
+rule "Patient has dyspnea or hypoxia and is COVID negative - HIGH"
+	when
+		$p: Patient(hasDyspneaOrHypoxia == 1, COVID19Positive == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 end
+
+rule "Patient has pneumonia and is COVID positive - HIGH"
+	when
+		$p: Patient(hasPneumonia == 1, COVID19Positive == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)");
+		update($p);
+end
+
+rule "Patient has pneumonia and is COVID negative - HIGH"
+	when
+		$p: Patient(hasPneumonia == 1, COVID19Positive == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+	then
+
+end
+// GOTOVA PROVERA ZA SARS-CoV2
+// AKO IMA COVID-19 VIRUS MERA 5 I KRAJ
+// AKO NEMA COVID-19 VIRUS KRAJ

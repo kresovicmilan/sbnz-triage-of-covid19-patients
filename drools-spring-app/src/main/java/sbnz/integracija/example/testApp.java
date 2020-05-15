@@ -38,22 +38,27 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
+		// DRZAVE
+		Country cLow = new Country(1l, "Somalia", true, 0.24);
+		Country cHigh = new Country(2l, "Serbia", true, 0.5);
+		
+		// PACIJENTI
 		Patient p1 = new Patient();
-		Country c = new Country(1l, "Serbia", true, 0.24);
-		kSession.insert(c);
+		kSession.insert(cLow);
+		kSession.insert(cHigh);
 		int fired = kSession.fireAllRules();
-		p1.setCountry(c);
+		p1.setCountry(cLow);
 		p1.setLastFever(36.8);
 		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		
 		Patient p2 = new Patient();
-		p2.setCountry(c);
+		p2.setCountry(cLow);
 		p2.setLastFever(37);
 		p2.setCovidPositiveContact(false);
 		List<Patient> contacted = new ArrayList<>();
 		List<Country> countries = new ArrayList<>();
 		contacted.add(p1);
-		countries.add(c);
+		countries.add(cLow);
 		p2.setContactedPatients(contacted);
 		p2.setCountriesVisited(countries);
 		
@@ -65,6 +70,34 @@ public class testApp {
 		System.out.println("PUCANA PRAVILA: " + fired);
 		System.out.println("RISK p1: " + p1.getRiskOfCovid());
 		System.out.println("RISK p2: " + p2.getRiskOfCovid());
+		
+		
+		// PACIJENT HIGH
+		Patient pHigh = new Patient();
+		pHigh.setCountry(cHigh);
+		pHigh.setLastFever(35);
+		pHigh.setCough(true);
+		pHigh.setSoreThroat(true);
+		pHigh.setCold(true);
+		pHigh.setDyspnea(true);
+		pHigh.setCOVID19Positive(-1);
+		
+		pHigh.setHasNonHospitalPneumonia(-1);
+		pHigh.setHasColdSoreThroatOrCough(-1);
+		pHigh.setHasDyspneaOrHypoxia(-1);
+		pHigh.setHasFever(-1);
+		pHigh.setLymphocyteCount(-1);
+		pHigh.setHasPneumonia(-1);
+		pHigh.setNonHospitalPneumonia(-1);
+		pHigh.setCOVID19Positive(1);
+		
+		
+		kSession.insert(pHigh);
+		fired = kSession.fireAllRules();
+
+		System.out.println("DEVELOMPENT: " + pHigh.getCountry().getCountryDevelopmentLevel());
+		System.out.println("PUCANA PRAVILA: " + fired);
+		System.out.println("MERE LECENJA: " + pHigh.getCuringMeasures());
 	}
 
 }
