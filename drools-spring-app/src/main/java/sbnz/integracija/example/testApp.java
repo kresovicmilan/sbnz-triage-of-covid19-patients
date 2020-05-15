@@ -16,7 +16,8 @@ public class testApp {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		testHighIDVIndexCountry();
+		/*testHighIDVIndexCountry();*/
+		testClassifyPatient();
 
 	}
 	
@@ -45,33 +46,50 @@ public class testApp {
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
 		
-		Patient p1 = new Patient();
-		Country c = new Country(1l, "Serbia", true, 0.24);
-		kSession.insert(c);
+		Country c1 = new Country(1l, "Serbia", true, 0.24);
+		Country c2 = new Country(1l, "NekaDrzava", false, 0.20);
+		kSession.insert(c1);
+		kSession.insert(c2);
 		int fired = kSession.fireAllRules();
-		p1.setCountry(c);
-		p1.setLastFever(36.8);
-		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		
+		//Patient 1
+		Patient p1 = new Patient();
+		p1.setName("P1");
+		p1.setCountry(c1);
+		p1.setLastFever(37.8);
+		p1.setCovidPositiveContact(true);
+		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
+		p1.setTestResults(Patient.CovidStatus.POSITIVE);
+		p1.setRespiratoryRate(25);
+		
+		//Patient 2
 		Patient p2 = new Patient();
-		p2.setCountry(c);
-		p2.setLastFever(37);
+		p2.setName("P2");
+		p2.setCountry(c2);
+		p2.setLastFever(37.5);
 		p2.setCovidPositiveContact(false);
 		List<Patient> contacted = new ArrayList<>();
 		List<Country> countries = new ArrayList<>();
 		contacted.add(p1);
-		countries.add(c);
+		countries.add(c1);
 		p2.setContactedPatients(contacted);
 		p2.setCountriesVisited(countries);
+		p2.setCovidStatus(Patient.CovidStatus.UNKNOWN);
+		p2.setTestResults(Patient.CovidStatus.NEGATIVE);
 		
-		System.out.println("DEVELOMPENT: " + p1.getCountry().getCountryDevelopmentLevel());
+		System.out.println("DEVELOPMENT: " + p1.getCountry().getCountryDevelopmentLevel());
 		System.out.println("FEVER: " + p1.getLastFever());
 		kSession.insert(p1);
 		kSession.insert(p2);
 		fired = kSession.fireAllRules();
-		System.out.println("PUCANA PRAVILA: " + fired);
-		System.out.println("RISK p1: " + p1.getRiskOfCovid());
-		System.out.println("RISK p2: " + p2.getRiskOfCovid());
+		
+		System.out.println("NUMBER OF RULES: " + fired);
+		
+		System.out.println("\nPacijent 1 - Zdravstvene mere - " + p1.getName());
+		p1.consoleOutputMeasure();
+		
+		System.out.println("\nPacijent 2 - Zdravstvene mere - " + p2.getName());
+		p2.consoleOutputMeasure();
 		
 	}
 	

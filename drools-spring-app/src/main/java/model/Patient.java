@@ -33,8 +33,8 @@ public class Patient implements Serializable{
 	private double oxygenSaturation;
 	private CovidStatus covidStatus;
 	private String curingMeasures;
-	private boolean shouldDoCovidTest;
 	private CovidStatus testResults;
+	private boolean shouldDoTest;
 	// dodao
 	private double lymphocyteCount;
 	private int nonHospitalPneumonia; // -1 unknown, 0 negative, 1 positive
@@ -48,13 +48,80 @@ public class Patient implements Serializable{
 	private int hasNonHospitalPneumonia; // -1 unknown, 0 negative, 1 positive
 	private int COVID19Positive; // -1 unknown, 0 negative, 1 positive
 	
+	private Risk coughOrFeverRisk;
+	private Risk contactRisk;
+	private Risk oxygenRisk;
+
+	
 
 	public Patient() {
 		this.curingMeasures = "";
-		this.shouldDoCovidTest = false;
 		this.testResults = CovidStatus.UNKNOWN;
+		this.shouldDoTest = false;
+		
+		this.coughOrFeverRisk = Risk.UNKNOWN;
+		this.contactRisk = Risk.UNKNOWN;
+		this.oxygenRisk = Risk.UNKNOWN;
 	}
 
+	public Risk getCoughOrFeverRisk() {
+		return coughOrFeverRisk;
+	}
+
+	public void setCoughOrFeverRisk(Risk coughOrFeverRisk) {
+		this.coughOrFeverRisk = coughOrFeverRisk;
+	}
+	
+	public Risk getContactRisk() {
+		return contactRisk;
+	}
+
+	public void setContactRisk(Risk contactRisk) {
+		this.contactRisk = contactRisk;
+	}
+	
+	public Risk getOxygenRisk() {
+		return oxygenRisk;
+	}
+
+	public void setOxygenRisk(Risk oxygenRisk) {
+		this.oxygenRisk = oxygenRisk;
+	}
+
+
+	public boolean getShouldDoTest() {
+		return shouldDoTest;
+	}
+	
+	public void setShouldDoTest(boolean shouldDoTest) {
+		this.shouldDoTest = shouldDoTest;
+	}
+
+	public String getCuringMeasures() {
+		return curingMeasures;
+	}
+
+	public void setCuringMeasures(String curingMeasures) {
+		this.curingMeasures = curingMeasures;
+	}
+
+	public CovidStatus getTestResults() {
+		return testResults;
+	}
+
+	public void setTestResults(CovidStatus testResults) {
+		this.testResults = testResults;
+	}
+
+	public double getOxygenSaturation() {
+		return oxygenSaturation;
+	}
+
+
+
+	public void setOxygenSaturation(double oxygenSaturation) {
+		this.oxygenSaturation = oxygenSaturation;
+	}
 
 	public long getId() {
 		return id;
@@ -226,16 +293,6 @@ public class Patient implements Serializable{
 	}
 
 
-	public double getOxygenSaturation() {
-		return oxygenSaturation;
-	}
-
-
-	public void setOxygenSaturation(double oxygenSaturation) {
-		this.oxygenSaturation = oxygenSaturation;
-	}
-
-
 	public CovidStatus getCovidStatus() {
 		return covidStatus;
 	}
@@ -244,37 +301,27 @@ public class Patient implements Serializable{
 	public void setCovidStatus(CovidStatus covidStatus) {
 		this.covidStatus = covidStatus;
 	}
-
-
-	public String getCuringMeasures() {
-		return curingMeasures;
+	
+	public void addTreatmentMeasure(String t) {
+		String[] parsed = t.split("-");
+		for (int i = 1; i < parsed.length; i++) {
+			if(!this.curingMeasures.contains("-" + parsed[i])) {
+				this.curingMeasures += "-" + parsed[i];
+			}
+		}
 	}
-
-
-	public void setCuringMeasures(String curingMeasures) {
-		this.curingMeasures = curingMeasures;
+	
+	public void addOutputMeasure(String t) {
+		this.curingMeasures = "";
+		this.curingMeasures += t;
 	}
-
-
-	public boolean isShouldDoCovidTest() {
-		return shouldDoCovidTest;
+	
+	public void consoleOutputMeasure() {
+		String[] parsed = this.getCuringMeasures().split("-");
+		for (int i = 1; i < parsed.length; i++) {
+			System.out.println("-" + parsed[i]);
+		}
 	}
-
-
-	public void setShouldDoCovidTest(boolean shouldDoCovidTest) {
-		this.shouldDoCovidTest = shouldDoCovidTest;
-	}
-
-
-	public CovidStatus getTestResults() {
-		return testResults;
-	}
-
-
-	public void setTestResults(CovidStatus testResults) {
-		this.testResults = testResults;
-	}
-
 
 	public double getLymphocyteCount() {
 		return lymphocyteCount;
@@ -374,6 +421,5 @@ public class Patient implements Serializable{
 	public void setCOVID19Positive(int cOVID19Positive) {
 		COVID19Positive = cOVID19Positive;
 	}
-
 	
 }
