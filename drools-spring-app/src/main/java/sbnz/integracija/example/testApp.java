@@ -16,7 +16,7 @@ public class testApp {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		testClassifyPatient();
+		testHighIDVIndexCountry();
 
 	}
 	
@@ -80,6 +80,8 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
 
 		// DRZAVE
 		Country cLow = new Country(1l, "Somalia", true, 0.24);
@@ -91,22 +93,31 @@ public class testApp {
 		
 		// PACIJENT HIGH
 		Patient pHigh = new Patient();
+		// Patient details
+		pHigh.setName("Test");
+		pHigh.setLastname("Testic");
 		pHigh.setCountry(cHigh);
-		pHigh.setLastFever(35);
-		pHigh.setCough(true);
-		pHigh.setSoreThroat(true);
-		pHigh.setCold(true);
-		pHigh.setDyspnea(true);
-		pHigh.setCOVID19Positive(-1);
 		
+		// Input values - ovo se menja
+		pHigh.setCold(true);
+		pHigh.setSoreThroat(true);
+		pHigh.setCough(true);
+
+		pHigh.setDyspnea(true);
+		pHigh.setOxygenSaturation(85); // ako je > 93 onda je hypoxia true
+		
+		pHigh.setLastFever(35);
+		pHigh.setLymphocyteCount(1300); // ako je < 1100 onda je bolestan
+		
+		pHigh.setHasPneumonia(-1);
 		pHigh.setHasNonHospitalPneumonia(-1);
+		pHigh.setCOVID19Positive(1);
+		
+		// Initial values for variables - ovo sam program menja i inicijalno je ovako
 		pHigh.setHasColdSoreThroatOrCough(-1);
 		pHigh.setHasDyspneaOrHypoxia(-1);
 		pHigh.setHasFever(-1);
-		pHigh.setLymphocyteCount(-1);
-		pHigh.setHasPneumonia(-1);
-		pHigh.setNonHospitalPneumonia(-1);
-		pHigh.setCOVID19Positive(1);
+		pHigh.setHasLowLymphocytes(-1);
 		
 		kSession.insert(pHigh);
 		fired = kSession.fireAllRules();

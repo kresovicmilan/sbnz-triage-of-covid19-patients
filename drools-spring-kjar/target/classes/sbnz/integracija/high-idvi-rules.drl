@@ -3,6 +3,7 @@ package sbnz.integracija;
 import model.Patient;
 import model.Country;
 
+global MyLogger myLogger;
 
 // PROVERA ZA PREHLADU GRLOBOLJU ILI KASALJ
 // NEMA PREDUSLOVE
@@ -12,6 +13,7 @@ rule "Patient does not have cough, fever and sore throat - HIGH"
 	then
 		$p.setRiskOfCovid(Patient.Risk.LOW);
 		$p.setHasColdSoreThroatOrCough(0);
+		myLogger.log("Patient does not have cough, faver and sore throat - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -20,14 +22,16 @@ rule "Patient has cough - HIGH"
 		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasColdSoreThroatOrCough(1);
+		myLogger.log("Patient has cough - HIGH " + $p.getName());
 		update($p);
 end
 
-rule "Patient has fever - HIGH"
+rule "Patient has cold - HIGH"
 	when
 		$p: Patient(cold == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasColdSoreThroatOrCough(1);
+		myLogger.log("Patient has cold - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -36,6 +40,7 @@ rule "Patient has sore throat - HIGH"
 		$p: Patient(soreThroat == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasColdSoreThroatOrCough(1);
+		myLogger.log("Patient has sore throat - HIGH " + $p.getName());
 		update($p);
 end
 // GOTOVA PROVRA ZA PREHLADU GRLOBOLJU ILI KASALJ
@@ -50,6 +55,7 @@ rule "Patient does not have dyspnea nor hypoxia - HIGH"
 		$p: Patient(hasColdSoreThroatOrCough == 1, dyspnea == false, oxygenSaturation <=93, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasDyspneaOrHypoxia(0);
+		myLogger.log("Patient does not have dyspnea nor hypoxia - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -59,6 +65,7 @@ rule "Patient has dyspnea - HIGH"
 	then
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4 zbog dyspnea, moze biti i mera 5(ovaj ispis zbog provere)");
 		$p.setHasDyspneaOrHypoxia(1);
+		myLogger.log("Patient has dyspnea - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -69,6 +76,7 @@ rule "Patient hypoxia check true - HIGH"
 	then
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 4 zbog hypoxia, moze biti i mera 5(ovaj ispis zbog provere)");
 		$p.setHasDyspneaOrHypoxia(1);
+		myLogger.log("Patient hypoxia check true - HIGH " + $p.getName());
 		update($p);
 end
 // GOTOVA PROVERA ZA DISPNEJU I HIPOKSIJU
@@ -83,6 +91,7 @@ rule "Patient did not have high fever - HIGH"
 		$p: Patient(hasDyspneaOrHypoxia == 0, lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasFever(0);
+		myLogger.log("Patient did not have high fever - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -91,6 +100,7 @@ rule "Patient had high fever - HIGH"
 		$p: Patient(hasDyspneaOrHypoxia == 0, lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasFever(1);
+		myLogger.log("Patient had high fever - HIGH " + $p.getName());
 		update($p);
 end
 // GOTOVA PROVERA ZA TEMPERATURU
@@ -106,6 +116,7 @@ rule "Patient has low lymphocytes level - HIGH"
 	then
 		$p.setHasLowLymphocytes(1);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)");
+		myLogger.log("Patient has low lymphocytes level - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -115,6 +126,7 @@ rule "Patient has high lymphocytes level - HIGH"
 	then
 		$p.setHasLowLymphocytes(0);
 		$p.setRiskOfCovid(Patient.Risk.LOW);
+		myLogger.log("Patient has high lymphocytes level - HIGH " + $p.getName());
 		update($p);
 end
 // GOTOVA PROVERA ZA BROJ LIMFOCITA
@@ -130,6 +142,7 @@ rule "Patient has pneumonia - HIGH"
 	then
 		$p.setHasPneumonia(1);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 3, moze biti i mera 5(ovaj ispis zbog provere)");
+		myLogger.log("Patient has pneumonia - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -138,6 +151,7 @@ rule "Patient does not have pneumonia - HIGH"
 		$p: Patient(hasFever == 1, pneumonia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasPneumonia(0);
+		myLogger.log("Patient does not have pneumonia - HIGH " + $p.getName());
 		update($p);
 end	
 // GOTOVA PROVERA ZA PNEUMONIU
@@ -153,6 +167,7 @@ rule "Patient has non-hospital pneumonia - HIGH"
 	then
 		$p.setHasNonHospitalPneumonia(1);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 2, mora biti samo mera 2(ovaj ispis zbog provere)");
+		myLogger.log("Patient has non-hospital pneumonia - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -162,6 +177,7 @@ rule "Patient does not have non-hospital pneumonia - HIGH"
 	then
 		$p.setHasNonHospitalPneumonia(0);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)");
+		myLogger.log("Patient does not have non-hospital pneumonia - HIGH " + $p.getName());
 		update($p);
 end
 // GOTOVA PROVERA ZA VANBOLNICKU PNEUMONIJU
@@ -176,6 +192,7 @@ rule "Patient has dyspnea or hypoxia and is COVID positive - HIGH"
 		$p: Patient(hasDyspneaOrHypoxia == 1, COVID19Positive == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)");
+		myLogger.log("Patient has dyspnea or hypoxia and is COVID positive - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -183,6 +200,7 @@ rule "Patient has dyspnea or hypoxia and is COVID negative - HIGH"
 	when
 		$p: Patient(hasDyspneaOrHypoxia == 1, COVID19Positive == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
+		myLogger.log("Patient has dyspnea or hypoxia and is COVID negative - HIGH " + $p.getName());
 end
 
 rule "Patient has pneumonia and is COVID positive - HIGH"
@@ -190,6 +208,7 @@ rule "Patient has pneumonia and is COVID positive - HIGH"
 		$p: Patient(hasPneumonia == 1, COVID19Positive == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)");
+		myLogger.log("Patient has pneumonia and is COVID positive - HIGH " + $p.getName());
 		update($p);
 end
 
@@ -197,7 +216,7 @@ rule "Patient has pneumonia and is COVID negative - HIGH"
 	when
 		$p: Patient(hasPneumonia == 1, COVID19Positive == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
-
+		myLogger.log("Patient has pneumonia and is COVID negative - HIGH " + $p.getName());
 end
 // GOTOVA PROVERA ZA SARS-CoV2
 // AKO IMA COVID-19 VIRUS MERA 5 I KRAJ
