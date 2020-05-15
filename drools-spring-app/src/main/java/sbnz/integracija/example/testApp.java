@@ -10,12 +10,13 @@ import org.springframework.boot.autoconfigure.cache.CacheType;
 
 import model.Country;
 import model.Patient;
+import util.MyLogger;
 
 public class testApp {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		testClassifyPatient();
+		testHighIDVIndexCountry();
 
 	}
 	
@@ -23,6 +24,9 @@ public class testApp {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
+		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
 		
 		Country c = new Country(1l, "Serbia", false, 0.34);
 		System.out.println("DEVELOMPENT: " + c.getCountryDevelopmentLevel());
@@ -37,6 +41,9 @@ public class testApp {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
+		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
 		
 		Patient p1 = new Patient();
 		Country c = new Country(1l, "Serbia", true, 0.24);
@@ -65,6 +72,59 @@ public class testApp {
 		System.out.println("PUCANA PRAVILA: " + fired);
 		System.out.println("RISK p1: " + p1.getRiskOfCovid());
 		System.out.println("RISK p2: " + p2.getRiskOfCovid());
+		
+	}
+	
+	public static void testHighIDVIndexCountry() {
+		KieServices ks = KieServices.Factory.get();
+		KieContainer kContainer = ks.getKieClasspathContainer();
+		KieSession kSession = kContainer.newKieSession();
+		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
+
+		// DRZAVE
+		Country cLow = new Country(1l, "Somalia", true, 0.24);
+		Country cHigh = new Country(2l, "Serbia", true, 0.5);
+		
+		kSession.insert(cLow);
+		kSession.insert(cHigh);
+		int fired = kSession.fireAllRules();
+		
+		// PACIJENT HIGH
+		Patient pHigh = new Patient();
+		// Patient details
+		pHigh.setName("Test");
+		pHigh.setLastname("Testic");
+		pHigh.setCountry(cHigh);
+		
+		// Input values - ovo se menja
+		pHigh.setCold(true);
+		pHigh.setSoreThroat(true);
+		pHigh.setCough(true);
+
+		pHigh.setDyspnea(true);
+		pHigh.setOxygenSaturation(85); // ako je > 93 onda je hypoxia true
+		
+		pHigh.setLastFever(35);
+		pHigh.setLymphocyteCount(1300); // ako je < 1100 onda je bolestan
+		
+		pHigh.setHasPneumonia(-1);
+		pHigh.setHasNonHospitalPneumonia(-1);
+		pHigh.setCOVID19Positive(1);
+		
+		// Initial values for variables - ovo sam program menja i inicijalno je ovako
+		pHigh.setHasColdSoreThroatOrCough(-1);
+		pHigh.setHasDyspneaOrHypoxia(-1);
+		pHigh.setHasFever(-1);
+		pHigh.setHasLowLymphocytes(-1);
+		
+		kSession.insert(pHigh);
+		fired = kSession.fireAllRules();
+
+		System.out.println("DEVELOMPENT: " + pHigh.getCountry().getCountryDevelopmentLevel());
+		System.out.println("PUCANA PRAVILA: " + fired);
+		System.out.println("MERE LECENJA: " + pHigh.getCuringMeasures());
 	}
 
 }
