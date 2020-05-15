@@ -25,6 +25,9 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
+		
 		Country c = new Country(1l, "Serbia", false, 0.34);
 		System.out.println("DEVELOMPENT: " + c.getCountryDevelopmentLevel());
 		System.out.println("INDEKS: " + c.getIdvIndex());
