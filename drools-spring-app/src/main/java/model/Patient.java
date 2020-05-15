@@ -33,12 +33,45 @@ public class Patient implements Serializable{
 	private double oxygenSaturation;
 	private CovidStatus covidStatus;
 	private String curingMeasures;
+	private boolean shouldDoCovidTest;
+	private boolean testPositive;
 	
 	public Patient() {
-		
+		this.curingMeasures = "";
+		this.shouldDoCovidTest = false;
+		this.testPositive = false;
 	}
 	
 	
+	
+
+	public boolean isTestPositive() {
+		return testPositive;
+	}
+
+
+
+
+	public void setTestPositive(boolean testPositive) {
+		this.testPositive = testPositive;
+	}
+
+
+
+
+	public boolean isShouldDoCovidTest() {
+		return shouldDoCovidTest;
+	}
+
+
+
+
+	public void setShouldDoCovidTest(boolean shouldDoCovidTest) {
+		this.shouldDoCovidTest = shouldDoCovidTest;
+	}
+
+
+
 
 	public double getOxygenSaturation() {
 		return oxygenSaturation;
