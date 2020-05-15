@@ -42,6 +42,9 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
+		
 		Patient p1 = new Patient();
 		Country c = new Country(1l, "Serbia", true, 0.24);
 		kSession.insert(c);
