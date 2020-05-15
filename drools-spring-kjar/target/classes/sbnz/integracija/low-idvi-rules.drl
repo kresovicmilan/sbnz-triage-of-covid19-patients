@@ -3,7 +3,7 @@ package sbnz.integracija;
 import model.Patient;
 import model.Country;
 
-rule "Patient did not have high fever"
+rule "Patient did not have high fever - LOW"
 	when
 		$p: Patient(lastFever <= 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -11,23 +11,14 @@ rule "Patient did not have high fever"
 		update($p);
 end
 
-rule "Patient had high fever"
+rule "Patient had high fever - LOW"
 	when
 		$p: Patient(lastFever > 37.3, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
 		update($p);
 end
 
-rule "Patient has cough"
-	when
-		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
-	then
-		$p.setRiskOfCovid(Patient.Risk.HIGH);
-		update($p);
-end
-
-rule "Patient does not have cough"
+rule "Patient does not have cough - LOW"
 	when
 		$p: Patient(cough == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -35,7 +26,15 @@ rule "Patient does not have cough"
 		update($p);
 end
 
-rule "Patient did not have contact with positive COVID-19 case within last 14 days"
+rule "Patient has cough - LOW"
+	when
+		$p: Patient(cough == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		update($p);
+end
+
+
+rule "Patient did not have contact with positive COVID-19 case within last 14 days - LOW"
 	when
 		$p: Patient(covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
 	then
@@ -43,5 +42,64 @@ rule "Patient did not have contact with positive COVID-19 case within last 14 da
 		update($p);
 end
 
+rule "Patient has Tachypnea - LOW"
+	when
+		$p: Patient(respiratoryRate > 20, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setTachnypnea(true);
+		update($p);
+end
+
+rule "Patient has Hypoxia - LOW"
+	when
+		$p: Patient(oxygenSaturation < 93, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setHypoxia(true);
+		update($p);
+end
+		
+
+rule "Patient had contact with positive COVID-19 case within last 14 days - LOW"
+	when
+		$p: Patient(covidPositiveContact == true, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+	then
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
+rule "Patient had contact with positive COVID-19 case within last 14 days - reevaluation - LOW"
+	when
+		$p: Patient($patients: contactedPatients, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									covidStatus == Patient.CovidStatus.POSITIVE
+								) from $patients,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		System.out.println("Uso vamo");
+		$p.setCovidPositiveContact(true);
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
+
+rule "Patient visited country that has covid cases - reevaluation - LOW"
+	when
+		$p: Patient($countries: countriesVisited, covidPositiveContact == false, country.countryDevelopmentLevel == Country.DevelompentLevel.LOW)
+		Number(intValue > 0) from accumulate(
+								Country(
+									covidPositive == true
+								) from $countries,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		System.out.println("Uso vamo 2");
+		$p.setRiskOfCovid(Patient.Risk.HIGH);
+		update($p);
+end
 
 

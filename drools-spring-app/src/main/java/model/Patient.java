@@ -8,7 +8,11 @@ public class Patient implements Serializable{
 	public enum Risk {
         LOW, HIGH, UNKNOWN
     };
-
+    
+    public enum CovidStatus {
+        POSITIVE, NEGATIVE, UNKNOWN
+    };
+    
 	private long id;
 	private String name;
 	private String lastname;
@@ -19,17 +23,34 @@ public class Patient implements Serializable{
 	private List<Patient> contactedPatients;
 	private List<Country> countriesVisited;
 	private int respiratoryRate; //u zavisnosti od respiratory rate-a, racunace se tachnypnea u pravilima
-	private double hypoxia;
+	private boolean hypoxia;
 	private boolean soreThroat;
 	private boolean cough;
 	private boolean dyspnea;
 	private boolean tachnypnea;
 	private double alc; //apsolute lymphocite count
 	private boolean pneumonia;
+	private double oxygenSaturation;
+	private CovidStatus covidStatus;
+	private String curingMeasures;
 	
 	public Patient() {
 		
 	}
+	
+	
+
+	public double getOxygenSaturation() {
+		return oxygenSaturation;
+	}
+
+
+
+	public void setOxygenSaturation(double oxygenSaturation) {
+		this.oxygenSaturation = oxygenSaturation;
+	}
+
+
 
 	public long getId() {
 		return id;
@@ -111,11 +132,11 @@ public class Patient implements Serializable{
 		this.respiratoryRate = respiratoryRate;
 	}
 
-	public double getHypoxia() {
+	public boolean getHypoxia() {
 		return hypoxia;
 	}
 
-	public void setHypoxia(double hypoxia) {
+	public void setHypoxia(boolean hypoxia) {
 		this.hypoxia = hypoxia;
 	}
 
@@ -166,7 +187,22 @@ public class Patient implements Serializable{
 	public void setPneumonia(boolean pneumonia) {
 		this.pneumonia = pneumonia;
 	}
+
+	public CovidStatus getCovidStatus() {
+		return covidStatus;
+	}
+
+	public void setCovidStatus(CovidStatus covidStatus) {
+		this.covidStatus = covidStatus;
+	}
 	
-	
+	public String getCuringMeasures() {
+		return curingMeasures;
+	}
+
+	public void setCuringMeasures(String curingMeasures) {
+		this.curingMeasures = curingMeasures;
+	}
+
 	
 }
