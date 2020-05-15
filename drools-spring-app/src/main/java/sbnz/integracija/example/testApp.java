@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.cache.CacheType;
 
 import model.Country;
 import model.Patient;
+import util.MyLogger;
 
 public class testApp {
 
@@ -23,6 +24,9 @@ public class testApp {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
+		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
 		
 		Country c = new Country(1l, "Serbia", false, 0.34);
 		System.out.println("DEVELOMPENT: " + c.getCountryDevelopmentLevel());
@@ -38,22 +42,30 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
+		MyLogger ml = new MyLogger();
+		kSession.setGlobal("myLogger", ml);
+		
 		Patient p1 = new Patient();
-		Country c = new Country(1l, "Serbia", true, 0.24);
-		kSession.insert(c);
+		p1.setName("P1");
+		Country c1 = new Country(1l, "Serbia", true, 0.24);
+		Country c2 = new Country(1l, "NekaDrzava", false, 0.20);
+		kSession.insert(c1);
+		kSession.insert(c2);
 		int fired = kSession.fireAllRules();
-		p1.setCountry(c);
-		p1.setLastFever(36.8);
+		p1.setCountry(c1);
+		p1.setLastFever(37.8);
+		p1.setCovidPositiveContact(true);
 		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		
 		Patient p2 = new Patient();
-		p2.setCountry(c);
-		p2.setLastFever(37);
+		p2.setName("P2");
+		p2.setCountry(c2);
+		p2.setLastFever(37.5);
 		p2.setCovidPositiveContact(false);
 		List<Patient> contacted = new ArrayList<>();
 		List<Country> countries = new ArrayList<>();
 		contacted.add(p1);
-		countries.add(c);
+		countries.add(c2);
 		p2.setContactedPatients(contacted);
 		p2.setCountriesVisited(countries);
 		
