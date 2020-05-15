@@ -37,10 +37,10 @@ rule "Patient doesn't have high fever - LOW"
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW, 
 					coughOrFeverRisk != Patient.Risk.HIGH)
 	then
-		$p.addTreatmentMeasure("- Mali rizik COVID-19");
+		$p.addTreatmentMeasure("- Mali rizik COVID19");
 		$p.setCoughOrFeverRisk(Patient.Risk.LOW);
 		myLogger.log("Patient doesn't have high fever - LOW " + $p.getName());
-		update($p);
+		//update($p);
 end
 
 rule "Patient doesn't have high cough - LOW"
@@ -50,14 +50,14 @@ rule "Patient doesn't have high cough - LOW"
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW, 
 					coughOrFeverRisk != Patient.Risk.HIGH)
 	then
-		$p.addTreatmentMeasure("- Mali rizik COVID-19");
+		$p.addTreatmentMeasure("- Mali rizik COVID19");
 		$p.setCoughOrFeverRisk(Patient.Risk.LOW);
 		myLogger.log("Patient doesn't have cough - LOW " + $p.getName());
-		update($p);
+		//update($p);
 end
 
 
-rule "Patient had contact with positive COVID-19 case within last 14 days - LOW"
+rule "Patient had contact with positive COVID19 case within last 14 days - LOW"
 	no-loop true
 	when
 		$p: Patient(covidPositiveContact == true,
@@ -67,11 +67,11 @@ rule "Patient had contact with positive COVID-19 case within last 14 days - LOW"
 	then
 		$p.setContactRisk(Patient.Risk.HIGH);
 		$p.addTreatmentMeasure("- Slucaj pod istragom- Izolacija");
-		myLogger.log("Patient had contact with positive COVID-19 case within last 14 days - LOW " + $p.getName());
+		myLogger.log("Patient had contact with positive COVID19 case within last 14 days - LOW " + $p.getName());
 		update($p);
 end
 
-rule "Patient had contact with positive COVID-19 case within last 14 days - reevaluation - LOW"
+rule "Patient had contact with positive COVID19 case within last 14 days - reevaluation - LOW"
 	no-loop true
 	when
 		$p: Patient($patients: contactedPatients,
@@ -91,7 +91,7 @@ rule "Patient had contact with positive COVID-19 case within last 14 days - reev
 		$p.setContactRisk(Patient.Risk.HIGH);
 		$p.setCovidPositiveContact(true);
 		$p.addTreatmentMeasure("- Slucaj pod istragom- Izolacija");
-		myLogger.log("Patient had contact with positive COVID-19 case within last 14 days - reevaluation - LOW " + $p.getName());
+		myLogger.log("Patient had contact with positive COVID19 case within last 14 days - reevaluation - LOW " + $p.getName());
 		update($p);
 end
 
@@ -117,7 +117,7 @@ rule "Patient visited country that has covid cases - LOW"
 		update($p);
 end
 
-rule "Patient didn't have contact with positive COVID-19 case within last 14 days - LOW"
+rule "Patient didn't have contact with positive COVID19 case within last 14 days - LOW"
 	no-loop true
 	when
 		$p: Patient(covidPositiveContact == false,
@@ -126,12 +126,12 @@ rule "Patient didn't have contact with positive COVID-19 case within last 14 day
 					contactRisk != Patient.Risk.HIGH)
 	then
 		$p.setContactRisk(Patient.Risk.LOW);
-		$p.addTreatmentMeasure("- Mali rizik COVID-19");
-		myLogger.log("Patient didn't have contact with positive COVID-19 case within last 14 days - LOW " + $p.getName());
-		update($p);
+		$p.addTreatmentMeasure("- Mali rizik COVID19");
+		myLogger.log("Patient didn't have contact with positive COVID19 case within last 14 days - LOW " + $p.getName());
+		//update($p);
 end
 
-rule "Patient didn't have contact with positive COVID-19 case within last 14 days - reevaluation - LOW"
+rule "Patient didn't have contact with positive COVID19 case within last 14 days - reevaluation - LOW"
 	no-loop true
 	when
 		$p: Patient($patients: contactedPatients,
@@ -149,9 +149,9 @@ rule "Patient didn't have contact with positive COVID-19 case within last 14 day
 							)
 	then
 		$p.setContactRisk(Patient.Risk.LOW);
-		$p.addTreatmentMeasure("- Mali rizik COVID-19");
-		myLogger.log("Patient didn't have contact with positive COVID-19 case within last 14 days - reevaluation - LOW " + $p.getName());
-		update($p);
+		$p.addTreatmentMeasure("- Mali rizik COVID19");
+		myLogger.log("Patient didn't have contact with positive COVID19 case within last 14 days - reevaluation - LOW " + $p.getName());
+		//update($p);
 end
 
 rule "Patient didn't visited country that has covid cases - LOW"
@@ -171,9 +171,9 @@ rule "Patient didn't visited country that has covid cases - LOW"
 							)
 	then
 		$p.setContactRisk(Patient.Risk.LOW);
-		$p.addTreatmentMeasure("- Mali rizik COVID-19");
+		$p.addTreatmentMeasure("- Mali rizik COVID19");
 		myLogger.log("Patient didn't visited country that has covid cases - LOW " + $p.getName());
-		update($p);
+		//update($p);
 end
 
 rule "Patient has Tachypnea - LOW"
@@ -253,7 +253,7 @@ rule "Test is positive - LOW"
 		myLogger.log("Test is positive - LOW " + $p.getName());
 		$p.setCovidStatus(Patient.CovidStatus.POSITIVE);
 		$p.addOutputMeasure("- Prijem u predvidjeno odeljenje za podrzavajucu negu");
-		update($p);
+		//update($p);
 end
 
 rule "Test is negative - LOW"
@@ -268,5 +268,5 @@ rule "Test is negative - LOW"
 		myLogger.log("Test is negative - LOW " + $p.getName());
 		$p.setCovidStatus(Patient.CovidStatus.NEGATIVE);
 		$p.addOutputMeasure("- Razmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana");
-		update($p);
+		//update($p);
 end
