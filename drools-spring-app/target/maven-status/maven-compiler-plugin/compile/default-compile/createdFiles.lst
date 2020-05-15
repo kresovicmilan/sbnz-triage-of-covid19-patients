@@ -1,6 +1,13 @@
 sbnz\integracija\example\facts\Item$Category.class
 sbnz\integracija\example\facts\Item.class
-sbnz\integracija\example\SampleAppService.class
 sbnz\integracija\example\SampleApp.class
+model\Patient$Risk.class
+model\Patient.class
+model\Country.class
+sbnz\integracija\example\testApp.class
+model\Patient$CovidStatus.class
+sbnz\integracija\example\SampleAppService.class
+model\Country$DevelompentLevel.class
 sbnz\integracija\example\SampleAppController.class
+model\User.class
 sbnz\integracija\example\SampleHomeController.class
