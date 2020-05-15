@@ -42,28 +42,22 @@ public class testApp {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
-
-		// DRZAVE
-		Country cLow = new Country(1l, "Somalia", true, 0.24);
-		Country cHigh = new Country(2l, "Serbia", true, 0.5);
-		
-		// PACIJENTI
 		Patient p1 = new Patient();
-		kSession.insert(cLow);
-		kSession.insert(cHigh);
+		Country c = new Country(1l, "Serbia", true, 0.24);
+		kSession.insert(c);
 		int fired = kSession.fireAllRules();
-		p1.setCountry(cLow);
+		p1.setCountry(c);
 		p1.setLastFever(36.8);
 		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		
 		Patient p2 = new Patient();
-		p2.setCountry(cLow);
+		p2.setCountry(c);
 		p2.setLastFever(37);
 		p2.setCovidPositiveContact(false);
 		List<Patient> contacted = new ArrayList<>();
 		List<Country> countries = new ArrayList<>();
 		contacted.add(p1);
-		countries.add(cLow);
+		countries.add(c);
 		p2.setContactedPatients(contacted);
 		p2.setCountriesVisited(countries);
 		
@@ -75,10 +69,22 @@ public class testApp {
 		System.out.println("PUCANA PRAVILA: " + fired);
 		System.out.println("RISK p1: " + p1.getRiskOfCovid());
 		System.out.println("RISK p2: " + p2.getRiskOfCovid());
-
-		System.out.println("CURING MEASSURES p1:\n" + p1.getCuringMeasures());
-		System.out.println("CURING MEASSURES p2:\n" + p2.getCuringMeasures());
 		
+	}
+	
+	public static void testHighIDVIndexCountry() {
+		KieServices ks = KieServices.Factory.get();
+		KieContainer kContainer = ks.getKieClasspathContainer();
+		KieSession kSession = kContainer.newKieSession();
+		
+
+		// DRZAVE
+		Country cLow = new Country(1l, "Somalia", true, 0.24);
+		Country cHigh = new Country(2l, "Serbia", true, 0.5);
+		
+		kSession.insert(cLow);
+		kSession.insert(cHigh);
+		int fired = kSession.fireAllRules();
 		
 		// PACIJENT HIGH
 		Patient pHigh = new Patient();
