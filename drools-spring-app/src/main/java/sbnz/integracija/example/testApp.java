@@ -20,7 +20,7 @@ public class testApp {
 		//testClassifyCountryHighIdvIndex();
 		
 		// Country has low IDV index
-		//testClassifyCountryLowIdvIndex();
+//		testClassifyCountryLowIdvIndex();
 		
 		// Patient has cold, dyspnea and is COVID-19 positive
 		//testClassifyPatientHighIdvIndex1();
@@ -33,6 +33,8 @@ public class testApp {
 		
 		// Patients have not been in contact with each other
 		//testClassifyPatientLowIdvIndex2();
+		
+		testClassifyPatientLowIdvIndex1();
 		
 	}
 	
@@ -103,17 +105,40 @@ public class testApp {
 		List<Patient> contacted = new ArrayList<>();
 		List<Country> countries = new ArrayList<>();
 		contacted.add(p1);
-		countries.add(c1);
+		//countries.add(c1);
 		p2.setContactedPatients(contacted);
 		p2.setCountriesVisited(countries);
 		p2.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		p2.setTestResults(Patient.CovidStatus.NEGATIVE);
 		
+		System.out.println("---------------------");
+		for(Patient p : p2.getContactedPatients()) {
+			System.out.println(p.getName());
+		}
+		System.out.println("---------------------");
+		
 		System.out.println("DEVELOPMENT: " + p1.getCountry().getCountryDevelopmentLevel());
 		System.out.println("FEVER: " + p1.getLastFever());
+		
 		kSession.insert(p1);
-		kSession.insert(p2);
 		fired = kSession.fireAllRules();
+		
+		KieServices ks2 = KieServices.Factory.get();
+		KieContainer kContainer2 = ks2.getKieClasspathContainer();
+		KieSession kSession2 = kContainer2.newKieSession();
+		
+		//kSession2.insert(c1);
+		//kSession2.insert(c2);
+		MyLogger ml2 = new MyLogger();
+		kSession2.setGlobal("myLogger", ml2);
+		p1.setLastFever(38.7);
+		p1.setCough(true);
+		kSession2.insert(p2);
+		kSession2.insert(p1);
+		p1.setCough(false);
+		p1.setLastFever(35.9);
+		kSession2.insert(p1);
+		fired = kSession2.fireAllRules();
 		
 		System.out.println("NUMBER OF RULES: " + fired);
 		
@@ -166,7 +191,8 @@ public class testApp {
 		
 		System.out.println("DEVELOPMENT: " + p1.getCountry().getCountryDevelopmentLevel());
 		System.out.println("FEVER: " + p1.getLastFever());
-		kSession.insert(p1);
+		
+		kSession.insert(p1);	
 		kSession.insert(p2);
 		fired = kSession.fireAllRules();
 		
