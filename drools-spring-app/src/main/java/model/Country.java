@@ -1,7 +1,23 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity
 public class Country implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -9,12 +25,29 @@ public class Country implements Serializable {
 	public enum DevelompentLevel {
         LOW, HIGH, UNKNOWN
     };
-
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+    
+    @Column
 	private String countryName;
+    
+    @Enumerated(EnumType.STRING)
 	private DevelompentLevel countryDevelopmentLevel;
+    
+    @Column
 	private boolean covidPositive;
+    
+    @Column
 	private double idvIndex;
+    
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Patient> patient;
+    
+    @ManyToMany(mappedBy = "countriesVisited")
+    private List<Patient> patientsVisited;
 	
 	public Country() {
 		
@@ -117,7 +150,21 @@ public class Country implements Serializable {
 		return "Country [id=" + id + ", countryName=" + countryName + ", countryDevelopmentLevel="
 				+ countryDevelopmentLevel + ", covidPositive=" + covidPositive + ", idvIndex=" + idvIndex + "]";
 	}
-	
-	
+
+	public List<Patient> getPatient() {
+		return patient;
+	}
+
+	public void setPatient(List<Patient> patient) {
+		this.patient = patient;
+	}
+
+	public List<Patient> getPatientsVisited() {
+		return patientsVisited;
+	}
+
+	public void setPatientsVisited(List<Patient> patientsVisited) {
+		this.patientsVisited = patientsVisited;
+	}
 	
 }

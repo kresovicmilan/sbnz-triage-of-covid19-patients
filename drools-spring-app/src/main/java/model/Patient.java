@@ -3,6 +3,23 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+@Entity
 public class Patient implements Serializable{
 	
 	public enum Risk {
@@ -13,43 +30,129 @@ public class Patient implements Serializable{
         POSITIVE, NEGATIVE, UNKNOWN
     };
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+    
+    @Column
 	private String name;
+    
+    @Column
 	private String lastname;
+    
+    @JsonManagedReference
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Country country; //dodao
+    
+    @Column
 	private boolean covidPositiveContact;
+    
+    @Column
 	private double lastFever;
+    
+    @Enumerated(EnumType.STRING)
 	private Risk riskOfCovid;
+    
+    @ManyToMany
+    @JoinTable(name="contacts",
+    		joinColumns = { @JoinColumn(name = "contactedPatientsByMe_id") },
+            inverseJoinColumns = { @JoinColumn(name = "contactedPatients_id") }
+    )
 	private List<Patient> contactedPatients;
+	
+    @ManyToMany
+    @JoinTable(name="contacts",
+     joinColumns = { @JoinColumn(name = "contactedPatients_id") },
+     inverseJoinColumns = { @JoinColumn(name = "contactedPatientsByMe_id") }
+    )
+	private List<Patient> contactedPatientsByMe;
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "patient_countriesvisited",
+            joinColumns = { @JoinColumn(name = "car_id") },
+            inverseJoinColumns = { @JoinColumn(name = "countriesvisited_id") }
+    )
 	private List<Country> countriesVisited;
+    
+    @Column
 	private int respiratoryRate; //u zavisnosti od respiratory rate-a, racunace se tachnypnea u pravilima
+    
+    @Column
 	private boolean hypoxia;
+    
+    @Column
 	private boolean soreThroat;
+    
+    @Column
 	private boolean cough;
+    
+    @Column
 	private boolean dyspnea;
+    
+    @Column
 	private boolean tachnypnea;
+    
+    @Column
 	private double alc; //apsolute lymphocite count
+    
+    @Column
 	private boolean pneumonia;
+	
+	@Column
 	private double oxygenSaturation;
+	
+	@Enumerated(EnumType.STRING)
 	private CovidStatus covidStatus;
+	
+	@Column
 	private String curingMeasures;
+	
+	@Enumerated(EnumType.STRING)
 	private CovidStatus testResults;
+	
+	@Column
 	private boolean shouldDoTest;
 	// dodao
+	
+	@Column
 	private double lymphocyteCount;
+	
+	@Column
 	private int nonHospitalPneumonia; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private boolean cold; // cold je prehlada fever je temperatura
+	
 	// pomocni koraci za ispaljivanje pravila dodao
+	@Column
 	private int hasColdSoreThroatOrCough; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int hasDyspneaOrHypoxia; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int hasFever; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int hasLowLymphocytes; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int hasPneumonia; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int hasNonHospitalPneumonia; // -1 unknown, 0 negative, 1 positive
+	
+	@Column
 	private int COVID19Positive; // -1 unknown, 0 negative, 1 positive
 	
+	@Enumerated(EnumType.STRING)
 	private Risk coughOrFeverRisk;
+	
+	@Enumerated(EnumType.STRING)
 	private Risk contactRisk;
+	
+	@Enumerated(EnumType.STRING)
 	private Risk oxygenRisk;
 
 	
@@ -421,5 +524,13 @@ public class Patient implements Serializable{
 	public void setCOVID19Positive(int cOVID19Positive) {
 		COVID19Positive = cOVID19Positive;
 	}
+
+	public List<Patient> getContactedPatientsByMe() {
+		return contactedPatientsByMe;
+	}
+
+	public void setContactedPatientsByMe(List<Patient> contactedPatientsByMe) {
+		this.contactedPatientsByMe = contactedPatientsByMe;
+	}	
 	
 }
