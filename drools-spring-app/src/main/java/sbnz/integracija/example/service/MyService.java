@@ -42,6 +42,8 @@ public class MyService {
 	public Country getCountryDevelopmentLevel(Country c) {
 		KieSession kieSession = kieContainer.newKieSession();
 		
+		System.out.println(c.toString());
+		
 		MyLogger ml = new MyLogger();
 		kieSession.setGlobal("myLogger", ml);
 
