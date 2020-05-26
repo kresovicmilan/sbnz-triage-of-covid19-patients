@@ -1,6 +1,6 @@
 package sbnz.integracija;
 
-import model.Country;
+import sbnz.integracija.example.model.Country;
 
 rule "Low IDV index country"
 	when

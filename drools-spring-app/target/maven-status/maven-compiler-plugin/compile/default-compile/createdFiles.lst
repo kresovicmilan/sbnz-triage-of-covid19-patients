@@ -1,6 +1,7 @@
+sbnz\integracija\example\util\MyLogger.class
 sbnz\integracija\example\controller\MyController.class
+sbnz\integracija\example\dto\CountryDTO.class
 sbnz\integracija\example\repository\CountryRepository.class
-util\MyLogger.class
 sbnz\integracija\example\model\Country$DevelompentLevel.class
 sbnz\integracija\example\testApp.class
 sbnz\integracija\example\repository\UserRepository.class
@@ -8,6 +9,7 @@ sbnz\integracija\example\SampleAppService.class
 sbnz\integracija\example\SampleAppController.class
 sbnz\integracija\example\model\Patient$CovidStatus.class
 sbnz\integracija\example\facts\Item$Category.class
+sbnz\integracija\example\controller\CountryController.class
 sbnz\integracija\example\facts\Item.class
 sbnz\integracija\example\SampleApp.class
 sbnz\integracija\example\service\MyService.class
