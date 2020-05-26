@@ -8,8 +8,8 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.boot.autoconfigure.cache.CacheType;
 
-import model.Country;
-import model.Patient;
+import sbnz.integracija.example.model.Country;
+import sbnz.integracija.example.model.Patient;
 import util.MyLogger;
 
 public class testApp {
