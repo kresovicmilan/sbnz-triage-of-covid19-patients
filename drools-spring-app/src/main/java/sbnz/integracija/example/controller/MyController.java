@@ -27,14 +27,16 @@ public class MyController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> userLogin(AppUser myUser) {
     	
-    	AppUser u = null;
-    	u = this.userRepository.findByUsername(myUser.getUsername());
-    	if (u.equals(null)) {
+    	try {
+    		AppUser u = this.userRepository.findByUsername(myUser.getUsername()).orElseThrow(Exception::new);
+    		if (u.getPassword().equals(myUser.getPassword())) {
+            	return new ResponseEntity<>("LOGIN SUCCESS", HttpStatus.OK);
+    		}
+    	}
+    	catch(Exception e) {
         	return new ResponseEntity<>("LOGIN FAILED", HttpStatus.BAD_REQUEST);
     	}
-    	if(u.getPassword().equals(myUser.getPassword())) {
-        	return new ResponseEntity<>("LOGIN SUCCESS", HttpStatus.OK);
-    	}
+
     	return new ResponseEntity<>("LOGIN FAILED", HttpStatus.BAD_REQUEST);
     }
     
@@ -42,9 +44,14 @@ public class MyController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> userRegister(AppUser myUser) {
     	
-    	
-        this.userRepository.save(myUser);
-    	return new ResponseEntity<>("REGISTER SUCCESS", HttpStatus.OK);
+    	try {
+    		AppUser u = this.userRepository.findByUsername(myUser.getUsername()).orElseThrow(Exception::new);
+    	}
+    	catch(Exception e) {
+            this.userRepository.save(myUser);
+        	return new ResponseEntity<>("REGISTER SUCCESS", HttpStatus.OK);
+    	}
+    	return new ResponseEntity<>("LOGIN FAILED", HttpStatus.BAD_REQUEST);
     }
     
     
