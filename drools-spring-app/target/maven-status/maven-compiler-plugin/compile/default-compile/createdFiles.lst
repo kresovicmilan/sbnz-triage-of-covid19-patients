@@ -1,6 +1,4 @@
 sbnz\integracija\example\controller\MyController.class
-sbnz\integracija\example\config\WebConfig$1.class
-sbnz\integracija\example\config\WebConfig$PushStateResourceResolver.class
 sbnz\integracija\example\repository\CountryRepository.class
 util\MyLogger.class
 sbnz\integracija\example\model\Country$DevelompentLevel.class
@@ -13,7 +11,6 @@ sbnz\integracija\example\facts\Item$Category.class
 sbnz\integracija\example\facts\Item.class
 sbnz\integracija\example\SampleApp.class
 sbnz\integracija\example\model\Patient.class
-sbnz\integracija\example\config\WebConfig.class
 sbnz\integracija\example\model\Country.class
 sbnz\integracija\example\model\Patient$Risk.class
 sbnz\integracija\example\model\AppUser.class

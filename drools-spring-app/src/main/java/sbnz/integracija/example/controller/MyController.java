@@ -14,7 +14,7 @@ import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.UserRepository;
 
 @RestController
-@RequestMapping("/views/api")
+@RequestMapping("/api")
 public class MyController {
 
 	@Autowired
@@ -42,11 +42,6 @@ public class MyController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> userRegister(AppUser myUser) {
     	
-    	AppUser u = null;
-    	u = userRepository.findByUsername(myUser.getUsername());
-    	if (!u.equals(null)) {
-        	return new ResponseEntity<>("REGISTER FAILED", HttpStatus.BAD_REQUEST);
-    	}
     	
         this.userRepository.save(myUser);
     	return new ResponseEntity<>("REGISTER SUCCESS", HttpStatus.OK);
