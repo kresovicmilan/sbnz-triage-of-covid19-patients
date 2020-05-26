@@ -10,6 +10,7 @@ sbnz\integracija\example\model\Patient$CovidStatus.class
 sbnz\integracija\example\facts\Item$Category.class
 sbnz\integracija\example\facts\Item.class
 sbnz\integracija\example\SampleApp.class
+sbnz\integracija\example\service\MyService.class
 sbnz\integracija\example\model\Patient.class
 sbnz\integracija\example\model\Country.class
 sbnz\integracija\example\model\Patient$Risk.class
