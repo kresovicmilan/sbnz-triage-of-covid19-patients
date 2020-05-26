@@ -1,6 +1,7 @@
 package sbnz.integracija.example.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,18 +30,19 @@ public class CountryController {
 	MyService myService;
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<?> addCountry(Country myCountry)  {
+	public ResponseEntity<?> addCountry(@RequestBody Country myCountry)  {
 		try {
 			Country country = this.countryRepository.findByCountryName(myCountry.getCountryName()).orElseThrow(Exception::new);
 			return new ResponseEntity<>("Country has not been added - Failed", HttpStatus.BAD_REQUEST);
 		} catch(Exception e) {
+			System.out.println(myCountry.toString());
 			this.countryRepository.save(myService.getCountryDevelopmentLevel(myCountry));
 			return new ResponseEntity<>("Country has been added - Success", HttpStatus.OK);
 		}
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public ResponseEntity<?> modifyCountry(Country editedCountry)  {
+	public ResponseEntity<?> modifyCountry(@RequestBody Country editedCountry)  {
 		try {
 			Country country = this.countryRepository.findByCountryName(editedCountry.getCountryName()).orElseThrow(Exception::new);
 			country.setCountryName(editedCountry.getCountryName());
