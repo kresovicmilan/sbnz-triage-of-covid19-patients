@@ -1,5 +1,6 @@
 package sbnz.integracija.example.controller;
 
+import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import sbnz.integracija.example.model.Patient;
 import sbnz.integracija.example.model.AppUser;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.UserRepository;
+import sbnz.integracija.example.service.MyService;
 
 @RestController
 @RequestMapping("/api")
@@ -23,6 +25,9 @@ public class MyController {
 	@Autowired
 	CountryRepository countryRepository;
 	
+	@Autowired
+	MyService myService;
+		
 	// LOGIN POST
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> userLogin(AppUser myUser) {
@@ -30,7 +35,7 @@ public class MyController {
     	try {
     		AppUser u = this.userRepository.findByUsername(myUser.getUsername()).orElseThrow(Exception::new);
     		if (u.getPassword().equals(myUser.getPassword())) {
-            	return new ResponseEntity<>("LOGIN SUCCESS", HttpStatus.OK);
+            	return new ResponseEntity<>(myUser, HttpStatus.OK);
     		}
     	}
     	catch(Exception e) {
@@ -73,6 +78,10 @@ public class MyController {
     @RequestMapping(value = "/getCurringMeasures", method = RequestMethod.POST)
     public ResponseEntity<?> getCurringMeasures(Patient p) {
     	
+    	p = this.myService.getCuringMeassures(p);
+    	
     	return new ResponseEntity<>("CURRING MEASURES SUCCESSFULLY FOUND", HttpStatus.OK);
     }
+    
+
 }
