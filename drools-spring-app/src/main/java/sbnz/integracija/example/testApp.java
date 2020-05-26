@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.cache.CacheType;
 
 import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Patient;
-import util.MyLogger;
+import sbnz.integracija.example.util.MyLogger;
 
 public class testApp {
 

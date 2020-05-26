@@ -1,4 +1,4 @@
-package util;
+package sbnz.integracija.example.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

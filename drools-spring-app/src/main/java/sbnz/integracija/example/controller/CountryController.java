@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sbnz.integracija.example.dto.CountryDTO;
 import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.repository.CountryRepository;
+import sbnz.integracija.example.service.MyService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,13 +25,16 @@ public class CountryController {
 	@Autowired
 	CountryRepository countryRepository;
 	
+	@Autowired
+	MyService myService;
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<?> addCountry(Country myCountry)  {
 		try {
 			Country country = this.countryRepository.findByCountryName(myCountry.getCountryName()).orElseThrow(Exception::new);
 			return new ResponseEntity<>("Country has not been added - Failed", HttpStatus.BAD_REQUEST);
 		} catch(Exception e) {
-			this.countryRepository.save(myCountry);
+			this.countryRepository.save(myService.getCountryDevelopmentLevel(myCountry));
 			return new ResponseEntity<>("Country has been added - Success", HttpStatus.OK);
 		}
 	}
