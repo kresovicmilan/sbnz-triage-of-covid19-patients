@@ -23,9 +23,6 @@ public class MyController {
 	UserRepository userRepository;
 	
 	@Autowired
-	CountryRepository countryRepository;
-	
-	@Autowired
 	MyService myService;
 		
 	// LOGIN POST
@@ -57,21 +54,6 @@ public class MyController {
         	return new ResponseEntity<>("REGISTER SUCCESS", HttpStatus.OK);
     	}
     	return new ResponseEntity<>("LOGIN FAILED", HttpStatus.BAD_REQUEST);
-    }
-    
-    
-    // COUNTRY POST
-    @RequestMapping(value = "/addCountry", method = RequestMethod.POST)
-    public ResponseEntity<?> addCountry(Country myCountry) {
-    	
-    	Country c = null;
-    	c = this.countryRepository.findByCountryName(myCountry.getCountryName());
-    	if (!c.equals(null)) {
-        	return new ResponseEntity<>("ADDING COUNTRY FAILED", HttpStatus.BAD_REQUEST);
-    	}
-    	
-    	this.countryRepository.save(c);
-    	return new ResponseEntity<>("ADDING COUNTRY SUCCESS", HttpStatus.OK);
     }
     
     // GET CURRING MEASURES POST
