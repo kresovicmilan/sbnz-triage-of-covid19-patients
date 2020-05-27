@@ -22,8 +22,7 @@ public class MyService {
 	}
 	
 	public Patient getCuringMeassures(Patient p) {
-		
-		/*KieServices ks = KieServices.Factory.get();
+		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();
 		
@@ -35,12 +34,14 @@ public class MyService {
 		
 		System.out.println("DEVELOMPENT: " + p.getCountry().getCountryDevelopmentLevel());
 		System.out.println("PUCANA PRAVILA: " + fired);
-		System.out.println("MERE LECENJA: " + p.getCuringMeasures());*/
+		System.out.println("MERE LECENJA: " + p.getCuringMeasures());
 		return p;
 	}
 	
 	public Country getCountryDevelopmentLevel(Country c) {
-		KieSession kieSession = kieContainer.newKieSession();
+		KieServices ks = KieServices.Factory.get();
+		KieContainer kContainer = ks.getKieClasspathContainer();
+		KieSession kieSession = kContainer.newKieSession();
 		
 		System.out.println(c.toString());
 		
