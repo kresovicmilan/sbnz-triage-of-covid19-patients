@@ -1,7 +1,8 @@
 package sbnz.integracija;
 
-import model.Patient;
-import model.Country;
+import sbnz.integracija.example.model.Patient;
+import sbnz.integracija.example.model.Country;
+import sbnz.integracija.example.util.MyLogger;
 
 global MyLogger myLogger;
 
