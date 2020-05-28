@@ -48,7 +48,7 @@ public class CountryController {
 			country.setCountryName(editedCountry.getCountryName());
 			country.setCovidPositive(editedCountry.isCovidPositive());
 			country.setIdvIndex(editedCountry.getIdvIndex());
-			Country savedCountry = this.countryRepository.save(country);
+			Country savedCountry = this.countryRepository.save(myService.getCountryDevelopmentLevel(country));
 			return new ResponseEntity<>(savedCountry, HttpStatus.OK);	
 		} catch(Exception e) {
 			return new ResponseEntity<>("Country has not been changed - Failed", HttpStatus.BAD_REQUEST);
