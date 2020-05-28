@@ -4,6 +4,7 @@ import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Country.DevelompentLevel;
 
 public class CountryDTO {
+	private long id;
 	private String countryName;
 	private boolean covidPositive;
 	private DevelompentLevel countryDevelopmentLevel;
@@ -14,20 +15,32 @@ public class CountryDTO {
 	}
 	
 	public CountryDTO (Country c) {
+		this.id = c.getId();
 		this.countryName = c.getCountryName();
 		this.covidPositive = c.isCovidPositive();
 		this.countryDevelopmentLevel = c.getCountryDevelopmentLevel();
 		this.idvIndex = c.getIdvIndex();
 	}
 	
-	public CountryDTO(String countryName, boolean covidPositive, DevelompentLevel countryDevelopmentLevel,
+	public CountryDTO(long id, String countryName, boolean covidPositive, DevelompentLevel countryDevelopmentLevel,
 			double idvIndex) {
 		super();
+		this.id = id; 
 		this.countryName = countryName;
 		this.covidPositive = covidPositive;
 		this.countryDevelopmentLevel = countryDevelopmentLevel;
 		this.idvIndex = idvIndex;
 	}
+	
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public String getCountryName() {
 		return countryName;
 	}
