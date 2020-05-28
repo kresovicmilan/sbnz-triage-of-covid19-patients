@@ -164,7 +164,7 @@ end
 // PREDUSLOV DA NEMA PNEUMONIJU
 rule "Patient has non-hospital pneumonia - HIGH"
 	when	
-		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == 1, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == true, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasNonHospitalPneumonia(1);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 2, mora biti samo mera 2(ovaj ispis zbog provere)");
@@ -174,7 +174,7 @@ end
 
 rule "Patient does not have non-hospital pneumonia - HIGH"
 	when	
-		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == 0, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
+		$p: Patient(hasPneumonia == 0, nonHospitalPneumonia == false, country.countryDevelopmentLevel == Country.DevelompentLevel.HIGH)
 	then
 		$p.setHasNonHospitalPneumonia(0);
 		$p.setCuringMeasures($p.getCuringMeasures() + "Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)");

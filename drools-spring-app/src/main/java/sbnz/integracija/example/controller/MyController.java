@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Patient;
+import sbnz.integracija.example.dto.PatientDTO;
 import sbnz.integracija.example.model.AppUser;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.UserRepository;
@@ -60,11 +61,11 @@ public class MyController {
     
     // GET CURRING MEASURES POST
     @RequestMapping(value = "/getCurringMeasures/{cname}", method = RequestMethod.POST)
-    public ResponseEntity<?> getCurringMeasures(@PathVariable String cname, Patient p) {
+    public ResponseEntity<?> getCurringMeasures(@PathVariable String cname, PatientDTO pDTO) {
     	
-    	p = this.myService.getCuringMeassures(p, cname);
+    	PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO, cname);
     	
-    	if (p!=null) {
+    	if (pDTORet!=null) {
     		return new ResponseEntity<>("CURRING MEASURES SUCCESSFULLY FOUND", HttpStatus.OK);
     	}
     	

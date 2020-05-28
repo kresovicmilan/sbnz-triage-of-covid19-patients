@@ -14,5 +14,7 @@ import sbnz.integracija.example.model.AppUser;
 public interface CountryRepository extends JpaRepository <Country, Long>{
 
     Optional<Country> findByCountryName(String countryName);
+    
+    Optional<Country> findById(long id);
 
 }

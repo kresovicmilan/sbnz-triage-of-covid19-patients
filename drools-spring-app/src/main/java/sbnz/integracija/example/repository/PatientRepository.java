@@ -11,5 +11,7 @@ import sbnz.integracija.example.model.Patient;
 public interface PatientRepository extends JpaRepository <Patient, Long>{
 
     Optional<Patient> findByName(String name);
+    
+    Optional<Patient> findById(long id);
 
 }

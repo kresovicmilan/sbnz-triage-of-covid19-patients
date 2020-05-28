@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import sbnz.integracija.example.dto.PatientDTO;
+
 @Entity
 public class Patient implements Serializable{
 	
@@ -121,7 +123,7 @@ public class Patient implements Serializable{
 	private double lymphocyteCount;
 	
 	@Column
-	private int nonHospitalPneumonia; // -1 unknown, 0 negative, 1 positive
+	private boolean nonHospitalPneumonia; 
 	
 	@Column
 	private boolean cold; // cold je prehlada fever je temperatura
@@ -438,12 +440,12 @@ public class Patient implements Serializable{
 	}
 
 
-	public int getNonHospitalPneumonia() {
+	public boolean getNonHospitalPneumonia() {
 		return nonHospitalPneumonia;
 	}
 
 
-	public void setNonHospitalPneumonia(int nonHospitalPneumonia) {
+	public void setNonHospitalPneumonia(boolean nonHospitalPneumonia) {
 		this.nonHospitalPneumonia = nonHospitalPneumonia;
 	}
 
