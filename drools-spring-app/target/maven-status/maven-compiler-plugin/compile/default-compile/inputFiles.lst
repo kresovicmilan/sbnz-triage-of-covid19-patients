@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\repository\CountryRepository.java
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\controller\CountryController.java
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\util\MyLogger.java
@@ -16,3 +17,23 @@ C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\service
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\SampleAppController.java
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\SampleHomeController.java
 C:\Projects\sbz\drools-spring-app\src\main\java\sbnz\integracija\example\repository\PatientRepository.java
+=======
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\util\MyLogger.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\SampleApp.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\service\MyService.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\config\WebConfig.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\SampleHomeController.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\model\AppUser.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\SampleAppService.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\repository\CountryRepository.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\repository\UserRepository.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\repository\PatientRepository.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\dto\CountryDTO.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\controller\CountryController.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\controller\MyController.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\model\Country.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\facts\Item.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\testApp.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\model\Patient.java
+D:\Desktop\sbnz-projekat\drools-spring-app\src\main\java\sbnz\integracija\example\SampleAppController.java
+>>>>>>> origin/master
