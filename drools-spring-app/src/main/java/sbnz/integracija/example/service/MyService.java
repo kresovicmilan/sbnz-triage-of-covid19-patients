@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sbnz.integracija.example.model.Country;
+import sbnz.integracija.example.model.Country.DevelompentLevel;
 import sbnz.integracija.example.model.Patient;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.util.MyLogger;
@@ -104,7 +105,10 @@ public class MyService {
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kieSession = kContainer.newKieSession();
 		
-		System.out.println(c.toString());
+		System.out.println("--- APPLYING RULES FOR COUNTRY ---");
+		System.out.println("--- Current state of the country ---");
+		System.out.println(c.toString() + "\n");
+		c.setCountryDevelopmentLevel(DevelompentLevel.UNKNOWN);
 		
 		MyLogger ml = new MyLogger();
 		kieSession.setGlobal("myLogger", ml);
@@ -112,11 +116,11 @@ public class MyService {
 		kieSession.insert(c);
 		int fired = kieSession.fireAllRules();
 		
-		System.out.println("Get country development level\n");
-		System.out.println("Country: " + c.getCountryName() + "\n");
-		System.out.println("Country IDVI index: " + c.getIdvIndex() + "\n");
+		System.out.println("--- Aftermath state of the country ---");
+		System.out.println("Country: " + c.getCountryName());
+		System.out.println("Country IDVI index: " + c.getIdvIndex());
+		System.out.println("Country development level: " + c.getCountryDevelopmentLevel().toString());
 		System.out.println("Number of rules fired: " + fired + "\n");
-		System.out.println("Country development level: " + c.getCountryDevelopmentLevel().toString() + "\n");
 		return c;
 	}
 }
