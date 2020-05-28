@@ -52,7 +52,7 @@ public class Country implements Serializable {
     private List<Patient> patientsVisited;
 	
 	public Country() {
-		
+		this.countryDevelopmentLevel = DevelompentLevel.UNKNOWN;
 	}
 
 	public Country(long id, String countryName, boolean covidPositive, double idvIndex) {

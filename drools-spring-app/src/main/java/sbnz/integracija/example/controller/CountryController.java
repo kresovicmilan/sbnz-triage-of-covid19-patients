@@ -36,20 +36,20 @@ public class CountryController {
 			return new ResponseEntity<>("Country has not been added - Failed", HttpStatus.BAD_REQUEST);
 		} catch(Exception e) {
 			System.out.println(myCountry.toString());
-			this.countryRepository.save(myService.getCountryDevelopmentLevel(myCountry));
-			return new ResponseEntity<>("Country has been added - Success", HttpStatus.OK);
+			Country c = this.countryRepository.save(myService.getCountryDevelopmentLevel(myCountry));
+			return new ResponseEntity<>(c, HttpStatus.OK);
 		}
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public ResponseEntity<?> modifyCountry(@RequestBody Country editedCountry)  {
 		try {
-			Country country = this.countryRepository.findByCountryName(editedCountry.getCountryName()).orElseThrow(Exception::new);
+			Country country = this.countryRepository.findById(editedCountry.getId()).orElseThrow(Exception::new);
 			country.setCountryName(editedCountry.getCountryName());
 			country.setCovidPositive(editedCountry.isCovidPositive());
 			country.setIdvIndex(editedCountry.getIdvIndex());
-			this.countryRepository.save(country);
-			return new ResponseEntity<>("Country has been changed - Success", HttpStatus.OK);	
+			Country savedCountry = this.countryRepository.save(country);
+			return new ResponseEntity<>(savedCountry, HttpStatus.OK);	
 		} catch(Exception e) {
 			return new ResponseEntity<>("Country has not been changed - Failed", HttpStatus.BAD_REQUEST);
 		}
