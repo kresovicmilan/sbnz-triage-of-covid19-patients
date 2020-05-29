@@ -19,6 +19,8 @@ public class PatientDTO {
 	
 	private double lastFever;
 	
+	private boolean hasCold;
+	
 	private double respiratoryRate;
 	
 	private boolean hypoxia;
@@ -49,7 +51,7 @@ public class PatientDTO {
 		
 	}
 	
-	public PatientDTO(String name, String lastName, Long countryId, boolean covidPositiveContact, double lastFever,
+	public PatientDTO(String name, boolean hasCold, String lastName, Long countryId, boolean covidPositiveContact, double lastFever,
 			double respiratoryRate, boolean hypoxia, boolean hasSoreThroat, boolean hasCough, boolean hasDyspnea, boolean hasTachypnea,
 			double acl, boolean pneumonia, double oxygenSaturation, boolean nonHospitalPneumonia,
 			List<Long> countriesVisited, List<Long> contactedPatients) {
@@ -59,6 +61,7 @@ public class PatientDTO {
 		this.countryId = countryId;
 		this.covidPositiveContact = covidPositiveContact;
 		this.lastFever = lastFever;
+		this.hasCold = hasCold;
 		this.respiratoryRate = respiratoryRate;
 		this.hypoxia = hypoxia;
 		this.hasSoreThroat = hasSoreThroat;
@@ -80,6 +83,7 @@ public class PatientDTO {
 		this.countryId = p.getCountry().getId();
 		this.covidPositiveContact = p.isCovidPositiveContact();
 		this.lastFever = p.getLastFever();
+		this.hasCold = p.isCold();
 		this.respiratoryRate = p.getRespiratoryRate();
 		this.hypoxia = p.isHypoxia();
 		this.hasSoreThroat = p.isSoreThroat();
@@ -98,8 +102,18 @@ public class PatientDTO {
 		}
 		this.curingMeassures = "";
 	}
+	
+	
 
 	
+	public boolean isHasCold() {
+		return hasCold;
+	}
+
+	public void setHasCold(boolean hasCold) {
+		this.hasCold = hasCold;
+	}
+
 	public long getId() {
 		return id;
 	}

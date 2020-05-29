@@ -4,6 +4,7 @@ sbnz\integracija\example\testApp.class
 sbnz\integracija\example\repository\PatientRepository.class
 sbnz\integracija\example\SampleAppController.class
 sbnz\integracija\example\service\MyService.class
+sbnz\integracija\example\dto\PatientDTO.class
 sbnz\integracija\example\model\Patient.class
 sbnz\integracija\example\SampleHomeController.class
 sbnz\integracija\example\util\MyLogger.class
