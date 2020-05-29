@@ -35,7 +35,7 @@ public class MyService {
 		this.kieContainer = kieContainer;
 	}
 	
-	public PatientDTO getCuringMeassures(PatientDTO pDTO, String cname) {
+	public PatientDTO getCuringMeassures(PatientDTO pDTO) {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
 		KieSession kSession = kContainer.newKieSession();

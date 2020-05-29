@@ -1,5 +1,8 @@
 package sbnz.integracija.example.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.kie.api.runtime.KieContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Patient;
+import sbnz.integracija.example.dto.CountryDTO;
 import sbnz.integracija.example.dto.PatientDTO;
 import sbnz.integracija.example.model.AppUser;
 import sbnz.integracija.example.repository.CountryRepository;
+import sbnz.integracija.example.repository.PatientRepository;
 import sbnz.integracija.example.repository.UserRepository;
 import sbnz.integracija.example.service.MyService;
 
@@ -24,6 +29,9 @@ public class MyController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	PatientRepository patientRepository;
 	
 	@Autowired
 	MyService myService;
@@ -60,10 +68,10 @@ public class MyController {
     }
     
     // GET CURRING MEASURES POST
-    @RequestMapping(value = "/getCurringMeasures/{cname}", method = RequestMethod.POST)
-    public ResponseEntity<?> getCurringMeasures(@PathVariable String cname, PatientDTO pDTO) {
+    @RequestMapping(value = "/getCurringMeasures", method = RequestMethod.POST)
+    public ResponseEntity<?> getCurringMeasures(@RequestBody PatientDTO pDTO) {
     	
-    	PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO, cname);
+    	PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO);
     	
     	if (pDTORet!=null) {
     		return new ResponseEntity<>("CURRING MEASURES SUCCESSFULLY FOUND", HttpStatus.OK);
@@ -72,6 +80,21 @@ public class MyController {
 		return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
 
     }
+    
+    @RequestMapping(value = "/patient/get/all", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllPatient()  {
+		try {
+			List<Patient> patients = this.patientRepository.findAll();
+			System.out.println(patients.size());
+			List<PatientDTO> patientsDTO = patients.stream().map(
+                    p -> new PatientDTO(p)
+            ).collect(Collectors.toList());
+			return new ResponseEntity<>(patientsDTO, HttpStatus.OK);	
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("List of patients cannot be retrieved - Failed", HttpStatus.BAD_REQUEST);
+		}
+	}
     
 
 }
