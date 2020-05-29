@@ -57,14 +57,14 @@ public class Patient implements Serializable{
     @Enumerated(EnumType.STRING)
 	private Risk riskOfCovid;
     
-    @ManyToMany
+    @ManyToMany//(fetch = FetchType.EAGER) Marko: dodao sam fetch type jer je izbacivao error da ne moze lazy da fetchuje entitet ali nije pomoglo
     @JoinTable(name="contacts",
     		joinColumns = { @JoinColumn(name = "contactedPatientsByMe_id") },
             inverseJoinColumns = { @JoinColumn(name = "contactedPatients_id") }
     )
 	private List<Patient> contactedPatients;
 	
-    @ManyToMany
+    @ManyToMany//(fetch = FetchType.EAGER) Isto kao 5 redova iznad
     @JoinTable(name="contacts",
      joinColumns = { @JoinColumn(name = "contactedPatients_id") },
      inverseJoinColumns = { @JoinColumn(name = "contactedPatientsByMe_id") }
@@ -74,7 +74,7 @@ public class Patient implements Serializable{
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "patient_countriesvisited",
-            joinColumns = { @JoinColumn(name = "car_id") },
+            joinColumns = { @JoinColumn(name = "patient_id") },
             inverseJoinColumns = { @JoinColumn(name = "countriesvisited_id") }
     )
 	private List<Country> countriesVisited;

@@ -79,6 +79,12 @@ public class MyService {
 		kSession.setGlobal("myLogger", ml);
 		kSession.insert(p.getCountry());
 		fired = kSession.fireAllRules();
+		
+		System.out.println("Country: " + p.getCountry().getCountryName());
+		System.out.println("Country IDVI index: " + p.getCountry().getIdvIndex());
+		System.out.println("Country development level: " + p.getCountry().getCountryDevelopmentLevel().toString());
+		System.out.println("Number of rules fired: " + fired + "\n");
+		
 		return new PatientDTO(p);
 
 	}
@@ -109,6 +115,10 @@ public class MyService {
 	
 	private Patient convertPatientDTOToPatient(PatientDTO pDTO) {
 		Patient p = new Patient();
+		//try {
+			//p = this.patientRepository.find
+		//}
+		System.out.println("PID: " + pDTO.getId());
 		if (pDTO.getId() != -1) {
 			p.setId(pDTO.getId());
 		}
@@ -130,10 +140,13 @@ public class MyService {
 		for (Long contactedP : pDTO.getContactedPatients()) {
 			Patient pPom = null;
 			try {
-				pPom = patientRepository.findById(contactedP).orElseThrow(Exception::new);
+				Long tempLong = contactedP + 1;
+				System.out.println("LONG PACIJENTA JE: " + tempLong);
+				pPom = patientRepository.findById(tempLong).orElseThrow(Exception::new);
 				// da se doda na obe strane
+				
 				pPom.getContactedPatientsByMe().add(p);
-				patientRepository.save(pPom);
+				//patientRepository.save(pPom); KAD SE OVO ODKOMENTARISE NE MOZE DA URADI
 			}
 			catch (Exception e) {
 				System.out.println("PATEINT NOT FOUND FOR LIST OF CONTACTED PATIENTS");

@@ -19,7 +19,7 @@ rule "High IDV index country"
 		update($c);
 end
 
-/*rule "Country has a patient that is COVID positive - LOW"
+rule "Country has a patient that is COVID positive - LOW"
 	no-loop true
 	when
 		$c: Country($patients: patient,
@@ -33,7 +33,7 @@ end
 								result(count)
 							)
 	then
-		$p.setCovidPositive(true);
+		$c.setCovidPositive(true);
 end
 
 rule "Country has a patient that is COVID positive - HIGH"
@@ -50,7 +50,7 @@ rule "Country has a patient that is COVID positive - HIGH"
 								result(count)
 							)
 	then
-		$p.setCovidPositive(true);
+		$c.setCovidPositive(true);
 end
 
 rule "Country has been visited by a patient that is COVID positive - LOW"
@@ -67,7 +67,7 @@ rule "Country has been visited by a patient that is COVID positive - LOW"
 								result(count)
 							)
 	then
-		$p.setCovidPositive(true);
+		$c.setCovidPositive(true);
 end
 
 rule "Country has been visited by a patient that is COVID positive - HIGH"
@@ -84,5 +84,5 @@ rule "Country has been visited by a patient that is COVID positive - HIGH"
 								result(count)
 							)
 	then
-		$p.setCovidPositive(true);
-end*/
+		$c.setCovidPositive(true);
+end

@@ -1,5 +1,6 @@
 package sbnz.integracija.example.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sbnz.integracija.example.model.Country;
@@ -94,9 +95,11 @@ public class PatientDTO {
 		this.pneumonia = p.isPneumonia();
 		this.oxygenSaturation = p.getOxygenSaturation();
 		this.nonHospitalPneumonia = p.getNonHospitalPneumonia();
+		this.countriesVisited = new ArrayList<Long>();
 		for (Country c : p.getCountriesVisited()) {
 			this.countriesVisited.add(c.getId());
 		}
+		this.contactedPatients = new ArrayList<Long>();
 		for (Patient p1 : p.getContactedPatients()) {
 			this.contactedPatients.add(p1.getId());
 		}
