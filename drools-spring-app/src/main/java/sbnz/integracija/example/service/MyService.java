@@ -166,6 +166,7 @@ public class MyService {
 		}
 		p.setRespiratoryRate((int)pDTO.getRespiratoryRate());
 		p.setHypoxia(pDTO.isHypoxia());
+		p.setCold(pDTO.isHasCold());
 		p.setSoreThroat(pDTO.isHasSoreThroat());
 		p.setCough(pDTO.isHasCough());
 		p.setDyspnea(pDTO.isHasDyspnea());
