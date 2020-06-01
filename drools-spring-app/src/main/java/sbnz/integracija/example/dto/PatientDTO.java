@@ -52,11 +52,12 @@ public class PatientDTO {
 		
 	}
 	
-	public PatientDTO(String name, boolean hasCold, String lastName, Long countryId, boolean covidPositiveContact, double lastFever,
+	public PatientDTO(long id, String name, boolean hasCold, String lastName, Long countryId, boolean covidPositiveContact, double lastFever,
 			double respiratoryRate, boolean hypoxia, boolean hasSoreThroat, boolean hasCough, boolean hasDyspnea, boolean hasTachypnea,
 			double acl, boolean pneumonia, double oxygenSaturation, boolean nonHospitalPneumonia,
 			List<Long> countriesVisited, List<Long> contactedPatients) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
 		this.countryId = countryId;
@@ -79,6 +80,7 @@ public class PatientDTO {
 	}
 	
 	public PatientDTO(Patient p) {
+		this.id = p.getId();
 		this.name = p.getName();
 		this.lastName = p.getLastname();
 		this.countryId = p.getCountry().getId();

@@ -74,7 +74,7 @@ public class MyController {
     	PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO);
     	
     	if (pDTORet!=null) {
-    		return new ResponseEntity<>("CURRING MEASURES SUCCESSFULLY FOUND", HttpStatus.OK);
+    		return new ResponseEntity<>(pDTORet, HttpStatus.OK);
     	}
     	
 		return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
@@ -85,7 +85,6 @@ public class MyController {
 	public ResponseEntity<?> getAllPatient()  {
 		try {
 			List<Patient> patients = this.patientRepository.findAll();
-			System.out.println(patients.size());
 			List<PatientDTO> patientsDTO = patients.stream().map(
                     p -> new PatientDTO(p)
             ).collect(Collectors.toList());
