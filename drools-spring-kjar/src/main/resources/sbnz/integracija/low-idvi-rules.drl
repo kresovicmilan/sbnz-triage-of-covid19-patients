@@ -43,7 +43,7 @@ rule "Patient doesn't have high fever - LOW"
 		//update($p);
 end
 
-rule "Patient doesn't have high cough - LOW"
+rule "Patient doesn't have cough - LOW"
 	no-loop true
 	when
 		$p: Patient(cough == false, 
