@@ -71,14 +71,21 @@ public class MyController {
     // GET CURRING MEASURES POST
     @RequestMapping(value = "/getCurringMeasures", method = RequestMethod.POST)
     public ResponseEntity<?> getCurringMeasures(@RequestBody PatientDTO pDTO) {
-    	
-    	PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO);
-    	
-    	if (pDTORet!=null) {
-    		return new ResponseEntity<>("CURRING MEASURES SUCCESSFULLY FOUND", HttpStatus.OK);
+    	try {
+    		PatientDTO pDTORet = this.myService.getCuringMeassures(pDTO);
+        	
+        	if (pDTORet!=null) {
+        		return new ResponseEntity<>(pDTORet, HttpStatus.OK);
+        	}else {
+        		return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
+        	}
+    	}catch (Exception e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
     	}
     	
-		return new ResponseEntity<>("ERROR", HttpStatus.BAD_REQUEST);
+    	
+		
 
     }
     
