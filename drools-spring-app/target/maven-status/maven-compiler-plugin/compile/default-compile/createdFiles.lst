@@ -1,3 +1,5 @@
+sbnz\integracija\example\config\WebConfig$1.class
+sbnz\integracija\example\config\WebConfig$PushStateResourceResolver.class
 sbnz\integracija\example\dto\CountryDTO.class
 sbnz\integracija\example\repository\CountryRepository.class
 sbnz\integracija\example\testApp.class
