@@ -1,0 +1,88 @@
+package sbnz.integracija;
+
+import sbnz.integracija.example.model.Country;
+import sbnz.integracija.example.model.Patient;
+
+rule "Low IDV index country"
+	when
+		$c: Country (idvIndex < 0.3, countryDevelopmentLevel == Country.DevelompentLevel.UNKNOWN )
+	then
+		$c.setCountryDevelopmentLevel(Country.DevelompentLevel.LOW);
+		update($c);
+end
+
+rule "High IDV index country"
+	when
+		$c: Country (idvIndex > 0.3, countryDevelopmentLevel == Country.DevelompentLevel.UNKNOWN )
+	then
+		$c.setCountryDevelopmentLevel(Country.DevelompentLevel.HIGH);
+		update($c);
+end
+
+rule "Country has a patient that is COVID positive - LOW"
+	no-loop true
+	when
+		$c: Country($patients: patient,
+					covidPositive == false)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									covidStatus == Patient.CovidStatus.POSITIVE
+								) from $patients,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		$c.setCovidPositive(true);
+end
+
+rule "Country has a patient that is COVID positive - HIGH"
+	no-loop true
+	when
+		$c: Country($patients: patient,
+					covidPositive == false)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									COVID19Positive == 1
+								) from $patients,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		$c.setCovidPositive(true);
+end
+
+rule "Country has been visited by a patient that is COVID positive - LOW"
+	no-loop true
+	when
+		$c: Country($pVisited: patientsVisited,
+					covidPositive == false)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									covidStatus == Patient.CovidStatus.POSITIVE
+								) from $pVisited,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		$c.setCovidPositive(true);
+end
+
+rule "Country has been visited by a patient that is COVID positive - HIGH"
+	no-loop true
+	when
+		$c: Country($pVisited: patientsVisited,
+					covidPositive == false)
+		Number(intValue > 0) from accumulate(
+								Patient(
+									COVID19Positive == 1
+								) from $pVisited,
+								init(int count = 0;),
+								action(count += 1;),
+								result(count)
+							)
+	then
+		$c.setCovidPositive(true);
+end

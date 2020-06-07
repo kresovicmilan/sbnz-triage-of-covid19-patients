@@ -57,14 +57,23 @@ public class MyService {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(s + "/drlRules/test0.drl");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// prodji kroz sve fileove u folderu
+		File folder = new File(s + "/drlRules");
+		File[] listOfFiles = folder.listFiles();
+		for(File file : listOfFiles) {
+			if (file.isFile()) {
+				String fileName = file.getName();
+				try {
+					fis = new FileInputStream(s + "/drlRules/" + fileName);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+						ks.getResources().newInputStreamResource(fis));
+			}
 		}
-		kfs.write("src/main/resources/sbnz/integracija/newRule" + 0 + ".drl",
-				ks.getResources().newInputStreamResource(fis));
+		
 		
 		KieBuilder kb = ks.newKieBuilder(kfs);
 		kb.buildAll();
@@ -73,6 +82,7 @@ public class MyService {
 		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
 		KieBase kieBase = kContainer.getKieBase();
 		KieSession kieSession = kContainer.newKieSession();
+		
 		
 		Patient p = convertPatientDTOToPatient(pDTO);
 		// ako nesto ne nadje dobro vrati null, i vratice bad request kao odgovor
@@ -131,14 +141,22 @@ public class MyService {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(s + "/drlRules/test0.drl");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// prodji kroz sve fileove u folderu
+		File folder = new File(s + "/drlRules");
+		File[] listOfFiles = folder.listFiles();
+		for(File file : listOfFiles) {
+			if (file.isFile()) {
+				String fileName = file.getName();
+				try {
+					fis = new FileInputStream(s + "/drlRules/" + fileName);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+						ks.getResources().newInputStreamResource(fis));
+			}
 		}
-		kfs.write("src/main/resources/sbnz/integracija/newRule" + 0 + ".drl",
-				ks.getResources().newInputStreamResource(fis));
 		
 		KieBuilder kb = ks.newKieBuilder(kfs);
 		kb.buildAll();
