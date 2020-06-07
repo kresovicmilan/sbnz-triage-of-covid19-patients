@@ -17,6 +17,7 @@ import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Patient;
 import sbnz.integracija.example.dto.CountryDTO;
 import sbnz.integracija.example.dto.PatientDTO;
+import sbnz.integracija.example.dto.RuleDTO;
 import sbnz.integracija.example.model.AppUser;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.PatientRepository;
@@ -96,5 +97,20 @@ public class MyController {
 		}
 	}
     
+    @RequestMapping(value = "/newRule", method = RequestMethod.POST)
+    public ResponseEntity<?> addNewRule(@RequestBody RuleDTO ruleDTO) {
+    	
+    	try {
+    		boolean ret = this.myService.addNewRule(ruleDTO.getRule());
+    		if (!ret) {
+        		return new ResponseEntity<>("Error occured", HttpStatus.BAD_REQUEST);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<>("Error occured", HttpStatus.BAD_REQUEST);
+    	}
+    	
+    	return new ResponseEntity<>("New rule added", HttpStatus.OK);
+    }
 
 }

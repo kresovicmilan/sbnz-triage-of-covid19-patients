@@ -1,0 +1,12 @@
+package sbnz.integracija;
+
+import sbnz.integracija.example.model.Country;
+import sbnz.integracija.example.model.Patient;
+
+rule "Low IDV index country"
+when
+$c: Country (idvIndex < 0.3, countryDevelopmentLevel == Country.DevelompentLevel.UNKNOWN )
+then
+$c.setCountryDevelopmentLevel(Country.DevelompentLevel.LOW);
+update($c);
+end

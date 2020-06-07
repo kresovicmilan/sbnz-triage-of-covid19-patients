@@ -9,6 +9,7 @@ sbnz\integracija\example\model\Patient.class
 sbnz\integracija\example\SampleHomeController.class
 sbnz\integracija\example\util\MyLogger.class
 sbnz\integracija\example\controller\MyController.class
+sbnz\integracija\example\dto\RuleDTO.class
 sbnz\integracija\example\model\Country$DevelompentLevel.class
 sbnz\integracija\example\repository\UserRepository.class
 sbnz\integracija\example\SampleAppService.class
