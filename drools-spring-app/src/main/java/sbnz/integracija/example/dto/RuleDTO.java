@@ -20,4 +20,5 @@ public class RuleDTO {
 		this.rule = rule;
 	}
 	
+	
 }
