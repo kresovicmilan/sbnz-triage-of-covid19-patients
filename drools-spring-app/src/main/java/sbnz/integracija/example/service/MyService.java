@@ -119,17 +119,29 @@ public class MyService {
 			//p = this.patientRepository.find
 		//}
 		System.out.println("PID: " + pDTO.getId());
-		if (pDTO.getId() != -1) {
-			p.setId(pDTO.getId());
+		if (pDTO.getId() != 0) {
+			try {
+				p = patientRepository.findById(pDTO.getId()).orElseThrow(() -> new Exception());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+
+			}
 		}
+		
+		System.out.println("SISTEM 1");
 		
 		Country c = null;
 		try {
+			
 			c = countryRepository.findById(pDTO.getCountryId()).orElseThrow(Exception::new);
 		}
 		catch(Exception e) {
 			return null;
 		}
+		
+		System.out.println("SISTEM 1.1");
 		
 		p.setName(pDTO.getName());
 		p.setLastname(pDTO.getLastName());
@@ -137,23 +149,26 @@ public class MyService {
 		p.setCovidPositiveContact(pDTO.isCovidPositiveContact());
 		p.setLastFever(pDTO.getLastFever());
 		p.setContactedPatients(new ArrayList<Patient>());
+		System.out.println("SISTEM 1.2");
 		for (Long contactedP : pDTO.getContactedPatients()) {
 			Patient pPom = null;
 			try {
-				Long tempLong = contactedP + 1;
+				Long tempLong = contactedP;
 				System.out.println("LONG PACIJENTA JE: " + tempLong);
 				pPom = patientRepository.findById(tempLong).orElseThrow(Exception::new);
 				// da se doda na obe strane
 				
-				pPom.getContactedPatientsByMe().add(p);
+				//pPom.getContactedPatientsByMe().add(p);
 				//patientRepository.save(pPom); KAD SE OVO ODKOMENTARISE NE MOZE DA URADI
 			}
 			catch (Exception e) {
 				System.out.println("PATEINT NOT FOUND FOR LIST OF CONTACTED PATIENTS");
 				continue;
 			}
+			System.out.println("DODAJE PACIJENTA " + pPom.getName());
 			p.getContactedPatients().add(pPom);
 		}
+		System.out.println("SISTEM 2");
 		p.setCountriesVisited(new ArrayList<Country>());
 		for (Long countryVisited : pDTO.getCountriesVisited()) {
 			Country cPom = null;
@@ -177,6 +192,7 @@ public class MyService {
 			}
 			p.getCountriesVisited().add(cPom);
 		}
+		System.out.println("SISTEM 3");
 		p.setRespiratoryRate((int)pDTO.getRespiratoryRate());
 		p.setHypoxia(pDTO.isHypoxia());
 		p.setCold(pDTO.isHasCold());
