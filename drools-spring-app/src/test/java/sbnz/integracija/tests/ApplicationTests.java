@@ -29,7 +29,7 @@ public class ApplicationTests {
 	}
 	
 	// COUNTRY IDV INDEX TEST, COUNTRY HAS HIGH IDV INDEX
-	//@Test
+	@Test
 	public void testCountry_HighIDVI() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -46,7 +46,7 @@ public class ApplicationTests {
 	}
 	
 	// COUNTRY IDV INDEX TEST, COUNTRY HAS LOW IDV INDEX
-	//@Test
+	@Test
 	public void testCountry_LowIDVI() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -180,7 +180,7 @@ public class ApplicationTests {
 	
 	// PATIENT HIGH IDV INDEX COUNTRY AND COVID NEGATIVE
 	// Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)
-	// @Test
+	//@Test
 	public void testClassifyPatientHighIdvIndex2() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();

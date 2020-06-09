@@ -303,10 +303,13 @@ public class MyService {
 		
 		if (pDTO.isTestResults()) {
 			p.setCOVID19Positive(1);
-			p.setTestResults(Patient.CovidStatus.POSITIVE);
+			p.setCovidStatus(Patient.CovidStatus.POSITIVE);
+			p.setTestResults(CovidStatus.POSITIVE);
 		} else {
+			System.out.println("USAO U SET NEGATIVE");
 			p.setCOVID19Positive(0);
-			p.setTestResults(Patient.CovidStatus.NEGATIVE);
+			p.setCovidStatus(Patient.CovidStatus.NEGATIVE);
+			p.setTestResults(CovidStatus.NEGATIVE);
 		}
 		
 		

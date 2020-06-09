@@ -275,13 +275,10 @@ rule "No other covid positive patient in the last two weeks - LOW"
 	no-loop true
     when
         $p1: Patient(covidStatus == Patient.CovidStatus.NEGATIVE,
-        			 shouldDoTest == true,
 					 testResults == Patient.CovidStatus.NEGATIVE,
 					 country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
-					 coughOrFeverRisk == Patient.Risk.HIGH,
-					 contactRisk == Patient.Risk.HIGH,
 					 $c: country)
-        Number(intValue == 0 ) from accumulate(
+		        Number(intValue == 0 ) from accumulate(
         		$p2: Patient(
         			this != $p1,
         			covidStatus == Patient.CovidStatus.POSITIVE,
@@ -290,5 +287,5 @@ rule "No other covid positive patient in the last two weeks - LOW"
         		count($p2)
         )
     then
-        System.out.println("Provera");
+    	$c.setCovidPositive(false);
 end
