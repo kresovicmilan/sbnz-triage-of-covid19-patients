@@ -6,7 +6,7 @@ Nakon kloniranja projekta sa github repozitorijuma potrebno je dodati folder tes
 Pokretanje test primera:
   drools-spring-app->src/main/java->sbnz.integracija.example->testApp.java pokrenuti kao java aplikaciju(run as java application). U konzoli ce biti ispisani rezultati predefinisanog test primera
   
-```
-JUNIT TEST
-```
+
+## JUNIT TEST
+
 Run jUnit test from drools-spring-app/src/test/java/sbnz/integracija/tests/ApplicationTests.java
