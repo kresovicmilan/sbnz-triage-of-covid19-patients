@@ -97,6 +97,7 @@ public class MyController {
 			List<PatientDTO> patientsDTO = patients.stream().map(
                     p -> new PatientDTO(p)
             ).collect(Collectors.toList());
+			System.out.println("Size od patientsDTO" + patientsDTO.size());
 			return new ResponseEntity<>(patientsDTO, HttpStatus.OK);	
 		} catch(Exception e) {
 			e.printStackTrace();

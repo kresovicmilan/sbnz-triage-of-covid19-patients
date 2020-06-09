@@ -48,6 +48,8 @@ public class PatientDTO {
 
 	private String curingMeassures;
 	
+	private boolean testResults;
+	
 	public PatientDTO() {
 		
 	}
@@ -55,7 +57,7 @@ public class PatientDTO {
 	public PatientDTO(long id,String name, boolean hasCold, String lastName, Long countryId, boolean covidPositiveContact, double lastFever,
 			double respiratoryRate, boolean hypoxia, boolean hasSoreThroat, boolean hasCough, boolean hasDyspnea, boolean hasTachypnea,
 			double acl, boolean pneumonia, double oxygenSaturation, boolean nonHospitalPneumonia,
-			List<Long> countriesVisited, List<Long> contactedPatients) {
+			List<Long> countriesVisited, List<Long> contactedPatients, boolean testResults) {
 		super();
 		this.name = name;
 		this.id = id;
@@ -77,6 +79,7 @@ public class PatientDTO {
 		this.countriesVisited = countriesVisited;
 		this.contactedPatients = contactedPatients;
 		this.curingMeassures = "";
+		this.testResults = testResults;
 	}
 	
 	public PatientDTO(Patient p) {
@@ -97,6 +100,15 @@ public class PatientDTO {
 		this.pneumonia = p.isPneumonia();
 		this.oxygenSaturation = p.getOxygenSaturation();
 		this.nonHospitalPneumonia = p.getNonHospitalPneumonia();
+		
+		if (p.getCOVID19Positive() == 1) {
+			this.testResults = true;
+		} else if (p.getTestResults() == Patient.CovidStatus.POSITIVE) {
+			this.testResults = true;
+		} else {
+			this.testResults = false;
+		}
+		
 		this.countriesVisited = new ArrayList<Long>();
 		for (Country c : p.getCountriesVisited()) {
 			this.countriesVisited.add(c.getId());
@@ -271,4 +283,14 @@ public class PatientDTO {
 	public void setCuringMeassures(String curingMeassures) {
 		this.curingMeassures = curingMeassures;
 	}
+
+	public boolean isTestResults() {
+		return testResults;
+	}
+
+	public void setTestResults(boolean testResults) {
+		this.testResults = testResults;
+	}
+	
+	
 }

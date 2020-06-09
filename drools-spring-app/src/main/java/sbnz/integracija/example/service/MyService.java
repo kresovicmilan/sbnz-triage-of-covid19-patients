@@ -301,6 +301,15 @@ public class MyService {
 		p.setTestResults(CovidStatus.UNKNOWN);
 		p.setRiskOfCovid(Risk.UNKNOWN);
 		
+		if (pDTO.isTestResults()) {
+			p.setCOVID19Positive(1);
+			p.setTestResults(Patient.CovidStatus.POSITIVE);
+		} else {
+			p.setCOVID19Positive(0);
+			p.setTestResults(Patient.CovidStatus.NEGATIVE);
+		}
+		
+		
 		// dodaj u drzavu tog pacijenta 
 		int addToList = 1;
 		for (Patient fromC : c.getPatient()) {
