@@ -1,6 +1,7 @@
 package sbnz.integracija.example.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,11 +19,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.kie.api.definition.type.Role;
+import org.kie.api.definition.type.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import sbnz.integracija.example.dto.PatientDTO;
 
+@Role(Role.Type.EVENT)
+@Timestamp("addTimestamp")
 @Entity
 public class Patient implements Serializable{
 	
@@ -37,6 +44,10 @@ public class Patient implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column
+    private Date addTimestamp;
     
     @Column
 	private String name;
@@ -535,6 +546,14 @@ public class Patient implements Serializable{
 
 	public void setContactedPatientsByMe(List<Patient> contactedPatientsByMe) {
 		this.contactedPatientsByMe = contactedPatientsByMe;
+	}
+
+	public Date getAddTimestamp() {
+		return addTimestamp;
+	}
+
+	public void setAddTimestamp(Date addTimestamp) {
+		this.addTimestamp = addTimestamp;
 	}	
 	
 }

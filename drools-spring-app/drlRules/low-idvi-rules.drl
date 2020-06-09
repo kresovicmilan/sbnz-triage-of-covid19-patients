@@ -270,3 +270,25 @@ rule "Test is negative - LOW"
 		$p.addOutputMeasure("- Razmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana");
 		//update($p);
 end
+
+rule "No other covid positive patient in the last two weeks - LOW"
+	no-loop true
+    when
+        $p1: Patient(covidStatus == Patient.CovidStatus.NEGATIVE,
+        			 shouldDoTest == true,
+					 testResults == Patient.CovidStatus.NEGATIVE,
+					 country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
+					 coughOrFeverRisk == Patient.Risk.HIGH,
+					 contactRisk == Patient.Risk.HIGH,
+					 $c: country)
+        Number(intValue == 0 ) from accumulate(
+        		$p2: Patient(
+        			this != $p1,
+        			covidStatus == Patient.CovidStatus.POSITIVE,
+        			this meets[2m] $p1
+        		) from $c.getPatient(),
+        		count($p2)
+        )
+    then
+        System.out.println("Provera");
+end

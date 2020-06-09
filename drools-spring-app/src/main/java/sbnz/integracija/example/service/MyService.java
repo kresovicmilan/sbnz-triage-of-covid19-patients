@@ -9,14 +9,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.kie.api.KieBase;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.builder.KieRepository;
+import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -52,6 +55,8 @@ public class MyService {
 	public PatientDTO getCuringMeassures(PatientDTO pDTO) {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
+		KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
+        kbconf.setOption(EventProcessingOption.STREAM);
 
 		// Adding admin created rules to session
 		Path currentRelativePath = Paths.get("");
@@ -213,6 +218,8 @@ public class MyService {
 		}
 		
 		System.out.println("SISTEM 1.1");
+		
+		p.setAddTimestamp(new Date());
 		
 		p.setName(pDTO.getName());
 		p.setLastname(pDTO.getLastName());

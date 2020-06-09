@@ -180,7 +180,7 @@ public class ApplicationTests {
 	
 	// PATIENT HIGH IDV INDEX COUNTRY AND COVID NEGATIVE
 	// Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)
-	@Test
+	// @Test
 	public void testClassifyPatientHighIdvIndex2() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
