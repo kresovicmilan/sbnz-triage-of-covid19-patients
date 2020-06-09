@@ -7,6 +7,6 @@ Pokretanje test primera:
   drools-spring-app->src/main/java->sbnz.integracija.example->testApp.java pokrenuti kao java aplikaciju(run as java application). U konzoli ce biti ispisani rezultati predefinisanog test primera
   
 
-## JUNIT TEST
+## JUnit tests
 
-Run jUnit test from drools-spring-app/src/test/java/sbnz/integracija/tests/ApplicationTests.java
+Run jUnit tests from drools-spring-app/src/test/java/sbnz/integracija/tests/ApplicationTests.java
