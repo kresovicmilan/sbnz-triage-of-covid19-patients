@@ -10,3 +10,8 @@ Pokretanje test primera:
 ## JUnit tests
 
 Run jUnit tests from drools-spring-app/src/test/java/sbnz/integracija/tests/ApplicationTests.java
+
+
+## .drl files
+
+Rules are located in drools-spring-app/drlRules
