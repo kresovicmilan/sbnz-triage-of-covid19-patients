@@ -3,6 +3,7 @@ package sbnz.integracija.tests;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class ApplicationTests {
 	
 	// PATIENT LOW IDV INDEX COUNTRY AND COVID NEGATIVE
 	// Prijem u predvidjeno odeljenje za podrzavajucu negu
-	//@Test
+	@Test
 	public void testClassifyPatientLowIdvIndex1() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -87,6 +88,8 @@ public class ApplicationTests {
 		p1.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		p1.setTestResults(Patient.CovidStatus.POSITIVE);
 		p1.setRespiratoryRate(25);
+		Date d1 = new Date();
+		p1.setAddTimestamp(d1);
 		
 		kSession.insert(p1);
 		kSession.fireAllRules();
@@ -98,7 +101,7 @@ public class ApplicationTests {
 	
 	// PATIENT LOW IDV INDEX COUNTRY AND COVID NEGATIVE
 	// Razmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana
-	//@Test
+	@Test
 	public  void testClassifyPatientLowIdvIndex2() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -126,6 +129,8 @@ public class ApplicationTests {
 		p2.setCountriesVisited(countries);
 		p2.setCovidStatus(Patient.CovidStatus.UNKNOWN);
 		p2.setTestResults(Patient.CovidStatus.NEGATIVE);
+		Date d1 = new Date();
+		p2.setAddTimestamp(d1);
 		
 		kSession.insert(p2);
 		kSession.fireAllRules();
@@ -135,7 +140,7 @@ public class ApplicationTests {
 	
 	// PATIENT HIGH IDV INDEX COUNTRY AND COVID POSITIVE
 	// Mera 4 zbog dyspnea, moze biti i mera 5(ovaj ispis zbog provere)Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)
-	//@Test
+	@Test
 	public void testClassifyPatientHighIdvIndex1() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -171,6 +176,8 @@ public class ApplicationTests {
 		pHigh.setHasDyspneaOrHypoxia(-1);
 		pHigh.setHasFever(-1);
 		pHigh.setHasLowLymphocytes(-1);
+		Date d1 = new Date();
+		pHigh.setAddTimestamp(d1);
 		
 		kSession.insert(pHigh);
 		kSession.fireAllRules();
@@ -180,7 +187,7 @@ public class ApplicationTests {
 	
 	// PATIENT HIGH IDV INDEX COUNTRY AND COVID NEGATIVE
 	// Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)
-	//@Test
+	@Test
 	public void testClassifyPatientHighIdvIndex2() {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks.getKieClasspathContainer();
@@ -222,6 +229,8 @@ public class ApplicationTests {
 		pHigh.setHasDyspneaOrHypoxia(-1);
 		pHigh.setHasFever(-1);
 		pHigh.setHasLowLymphocytes(-1);
+		Date d1 = new Date();
+		pHigh.setAddTimestamp(d1);
 		
 		kSession.insert(pHigh);
 		kSession.fireAllRules();
