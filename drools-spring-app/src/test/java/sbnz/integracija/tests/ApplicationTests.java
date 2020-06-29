@@ -13,10 +13,13 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.integracija.example.event.ExaminationEvent;
+import sbnz.integracija.example.model.AppUser;
 import sbnz.integracija.example.model.Country;
 import sbnz.integracija.example.model.Patient;
 import sbnz.integracija.example.service.MyService;
 import sbnz.integracija.example.model.Country.DevelompentLevel;
+import sbnz.integracija.example.model.Examination;
 import sbnz.integracija.example.util.MyLogger;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -78,6 +81,7 @@ public class ApplicationTests {
 		Country c1 = new Country(1l, "Serbia", true, 0.24);
 		kSession.insert(c1);
 		kSession.fireAllRules();
+		
 		
 		//Patient 1
 		Patient p1 = new Patient();

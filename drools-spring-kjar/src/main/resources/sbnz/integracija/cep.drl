@@ -1,0 +1,23 @@
+package sbnz.integracija;
+
+import sbnz.integracija.example.model.AppUser;
+import sbnz.integracija.example.model.Patient;
+import sbnz.integracija.example.event.ExaminationEvent;
+import sbnz.integracija.example.model.Examination;
+
+
+rule "More than 100 checks in 30 minutes from one doctor"
+    when
+    	$u: AppUser(AppUser.getRole() == 1)
+        $e1: ExaminationEvent($cId: Examination.getDoctor().getId())
+        Number(intValue >=100) from accumulate(
+            $e2: ExaminationEvent(
+                this != $e1, 
+                Examination.getDoctor().getId() == $cId, 
+                this meets[30m] $e1
+            ),
+            count($e2)
+        )
+    then
+        System.out.println("Max amount reached.");
+end
