@@ -1,0 +1,125 @@
+package sbnz.integracija;
+
+import sbnz.integracija.example.model.PatientReport;
+
+/*rule "No new report in last 30 seconds!"
+	salience 100
+    when
+        not(
+            $pr: PatientReport()
+            over window:time(30s)
+        )
+    then
+        $pr.setReportCondition(PatientReport.ReportCondition.BROKEN_MACHINE);
+end*/
+
+rule "Temperature is over maximum value"
+	salience 90
+	when
+		$pr: PatientReport(temperature > 38)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Temperature is under minimum value"
+	salience 90
+	when
+		$pr: PatientReport(temperature < 36)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Respiratory rate is over maximum value"
+	salience 90
+	when
+		$pr: PatientReport(respiratoryRate > 16)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Respiratory rate is under minimum value"
+	salience 90
+	when
+		$pr: PatientReport(respiratoryRate < 12)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Oxygen saturation is over maximum value"
+	salience 90
+	when
+		$pr: PatientReport(oxygenSaturation > 100)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Oxygen saturation is under minimum value"
+	salience 90
+	when
+		$pr: PatientReport(oxygenSaturation < 60)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Lymphocite count is over maximum value"
+	salience 90
+	when
+		$pr: PatientReport(lymphociteCount > 4800)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Lymphocite count is under minimum value"
+	salience 90
+	when
+		$pr: PatientReport(lymphociteCount < 1000)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Heart rate is over maximum value"
+	salience 90
+	when
+		$pr: PatientReport(heartRate > 150)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Heart rate is under minimum value"
+	salience 90
+	when
+		$pr: PatientReport(heartRate < 80)
+	then
+		$pr.setExtremeValue($pr.getExtremeValue() + 1);
+end
+
+rule "Patient is healthy"
+	salience 80
+	when
+		$pr: PatientReport($exV: extremeValue)
+		eval($exV == 0)
+	then
+		$pr.setReportCondition(PatientReport.ReportCondition.HEALTHY);
+		System.out.println("UDJE U HEALTHY");
+		System.out.println("Vrednost extreme value:" + $exV);
+end
+
+rule "Patient is in critical condition"
+	salience 80
+	when
+		$pr: PatientReport($exV: extremeValue)
+		eval($exV <= 3 && $exV > 0)
+	then
+		$pr.setReportCondition(PatientReport.ReportCondition.CRITICAL);
+		System.out.println("UDJE U CRITICAL");
+end
+
+rule "Patient is dead"
+	salience 80
+	when
+		$pr: PatientReport($exV: extremeValue)
+		eval($exV > 3)
+	then
+		$pr.setReportCondition(PatientReport.ReportCondition.DEAD);
+		System.out.println("UDJE U DEAD");
+end

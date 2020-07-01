@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
@@ -24,6 +26,7 @@ import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import sbnz.integracija.example.dto.PatientDTO;
@@ -32,6 +35,7 @@ import sbnz.integracija.example.model.Country.DevelompentLevel;
 import sbnz.integracija.example.model.Patient.CovidStatus;
 import sbnz.integracija.example.model.Patient.Risk;
 import sbnz.integracija.example.model.Patient;
+import sbnz.integracija.example.model.PatientReport;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.PatientRepository;
 import sbnz.integracija.example.util.MyLogger;
@@ -40,7 +44,7 @@ import sbnz.integracija.example.util.MyLogger;
 public class MyService {
 
 	private final KieContainer kieContainer;
-	
+
 	@Autowired
 	CountryRepository countryRepository;
 	
