@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.kie.api.KieBase;
 import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
@@ -17,6 +19,7 @@ import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +41,16 @@ public class ReportService {
 	
 	@Autowired
 	PatientRepository patientRepository;
+	
+	@Autowired
+	EmailService emailService;
 
 	@Autowired
 	public ReportService(KieContainer kieContainer){
 		this.kieContainer = kieContainer;
 	}
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 120000)
 	private void probaSchedule() {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
@@ -108,6 +114,34 @@ public class ReportService {
 			System.out.println("Patient report after: " + reports.get(p.getId()).getReportCondition().toString());
 			System.out.println("Patient temperature after: " + reports.get(p.getId()).getTemperature());
 			System.out.println("Patient extreme value after: " + reports.get(p.getId()).getExtremeValue());
+		
+			if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL")) {
+				try {
+					emailService.sendEmail("dervy97@gmail.com", "Critical patient", "Patient is in critical condition");
+				} catch (MailException | MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			else if (reports.get(p.getId()).getReportCondition().toString().equals("DEAD")) {
+				try {
+					emailService.sendEmail("dervy97@gmail.com", "Dead patient", "Patient is in dead condition");
+				} catch (MailException | MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			else if (reports.get(p.getId()).getReportCondition().toString().equals("BROKEN_MACHINE")) {
+				try {
+					emailService.sendEmail("dervy97@gmail.com", "Machine broken", "Machine broke down, check on patient and fix the machine");
+				} catch (MailException | MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 		}
 	}
 }

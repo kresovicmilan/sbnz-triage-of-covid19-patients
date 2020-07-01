@@ -24,7 +24,7 @@ public class EmailService {
         mailSender.setPort(587);
 
         mailSender.setUsername("isa.psw.tim17@gmail.com");
-        mailSender.setPassword("krokodil123");
+        mailSender.setPassword("Krokodil123$");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -41,7 +41,7 @@ public class EmailService {
     @Autowired
     private Environment env;
     
-    private void SendEmail(String receiver, String subject, String content) throws MailException, MessagingException{
+    public void sendEmail(String receiver, String subject, String content) throws MailException, MessagingException{
     	 MimeMessage mimi = getJavaMailSender().createMimeMessage();
          MimeMessageHelper helper = new MimeMessageHelper(mimi, "utf-8");
          String htmlMsg = "<h3>" + "Hello " + receiver + ",<br></br>" + content + "</h3>";
