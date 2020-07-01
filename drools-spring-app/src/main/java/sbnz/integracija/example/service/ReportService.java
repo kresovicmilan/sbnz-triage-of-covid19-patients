@@ -117,7 +117,7 @@ public class ReportService {
 		
 			if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL")) {
 				try {
-					emailService.sendEmail("dervy97@gmail.com", "Critical patient", "Patient is in critical condition");
+					emailService.sendEmail("dervy97@mailinator.com", "Critical patient", "Patient is in critical condition");
 				} catch (MailException | MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -126,7 +126,7 @@ public class ReportService {
 			}
 			else if (reports.get(p.getId()).getReportCondition().toString().equals("DEAD")) {
 				try {
-					emailService.sendEmail("dervy97@gmail.com", "Dead patient", "Patient is in dead condition");
+					emailService.sendEmail("dervy97@mailinator.com", "Dead patient", "Patient is in dead condition");
 				} catch (MailException | MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -135,7 +135,7 @@ public class ReportService {
 			}
 			else if (reports.get(p.getId()).getReportCondition().toString().equals("BROKEN_MACHINE")) {
 				try {
-					emailService.sendEmail("dervy97@gmail.com", "Machine broken", "Machine broke down, check on patient and fix the machine");
+					emailService.sendEmail("dervy97@mailinator.com", "Machine broken", "Machine broke down, check on patient and fix the machine");
 				} catch (MailException | MessagingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

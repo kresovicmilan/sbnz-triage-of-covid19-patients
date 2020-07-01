@@ -66,13 +66,13 @@ public class WebConfig implements WebMvcConfigurer {
             if (isIgnored(requestPath)) {
                 return null;
             }
-            if (isHandled(requestPath)) {
+            /*if (isHandled(requestPath)) {
                 return locations.stream()
                         .map(loc -> createRelative(loc, requestPath))
                         .filter(resource -> resource != null && resource.exists())
                         .findFirst()
                         .orElseGet(null);
-            }
+            }*/
             return index;
         }
 
