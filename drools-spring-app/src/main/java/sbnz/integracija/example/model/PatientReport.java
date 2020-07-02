@@ -47,21 +47,21 @@ public class PatientReport {
 			this.extremeValue = 5;
 		}
 		this.extremeValue = 0;
-		// ovaj umire
-		if (patientId % 1 == 0) {
-			this.temperature = pReport.getTemperature() + pReport.getTemperature() * 0.05;
-			this.respiratoryRate = pReport.getRespiratoryRate() + pReport.getRespiratoryRate() * 0.03;
-			this.oxygenSaturation = pReport.getOxygenSaturation() + pReport.getOxygenSaturation() * 0.05;
-			this.lymphociteCount = pReport.getLymphociteCount() + pReport.getLymphociteCount() + 0.1;
-			this.heartRate = pReport.getHeartRate() + pReport.getHeartRate() * 0.005;
-		}
 		// ovaj zivi
-		else {
+		if (patientId % 2 == 0) {
 			this.temperature = ThreadLocalRandom.current().nextDouble(36, 38);
 			this.respiratoryRate = ThreadLocalRandom.current().nextDouble(12, 16);
 			this.oxygenSaturation = ThreadLocalRandom.current().nextDouble(60, 100);
 			this.lymphociteCount = ThreadLocalRandom.current().nextDouble(1000, 4800);
 			this.heartRate = ThreadLocalRandom.current().nextDouble(80, 150);
+		}
+		// ovaj umire
+		else {
+			this.temperature = pReport.getTemperature() + pReport.getTemperature() * 0.05;
+			this.respiratoryRate = pReport.getRespiratoryRate() + pReport.getRespiratoryRate() * 0.03;
+			this.oxygenSaturation = pReport.getOxygenSaturation() + pReport.getOxygenSaturation() * 0.05;
+			this.lymphociteCount = pReport.getLymphociteCount() + pReport.getLymphociteCount() + 0.1;
+			this.heartRate = pReport.getHeartRate() + pReport.getHeartRate() * 0.005;
 		}
 	}
 	

@@ -109,6 +109,7 @@ public class ReportService {
 			kieSession.dispose();
 			kieSession = kContainer.newKieSession();
 			kieSession.setGlobal("myLogger", ml);
+			kieSession.setGlobal("myValue", Integer.valueOf(1));
 			kieSession.insert(reports.get(p.getId()));
 			fired = kieSession.fireAllRules();
 			System.out.println("Patient report after: " + reports.get(p.getId()).getReportCondition().toString());

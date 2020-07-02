@@ -2,6 +2,8 @@ package sbnz.integracija;
 
 import sbnz.integracija.example.model.PatientReport;
 
+global java.lang.Integer myValue;
+
 /*rule "No new report in last 30 seconds!"
 	salience 100
     when
@@ -14,7 +16,7 @@ import sbnz.integracija.example.model.PatientReport;
 end*/
 
 rule "Temperature is over maximum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(temperature > 38)
 	then
@@ -22,7 +24,7 @@ rule "Temperature is over maximum value"
 end
 
 rule "Temperature is under minimum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(temperature < 36)
 	then
@@ -30,7 +32,7 @@ rule "Temperature is under minimum value"
 end
 
 rule "Respiratory rate is over maximum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(respiratoryRate > 16)
 	then
@@ -38,7 +40,7 @@ rule "Respiratory rate is over maximum value"
 end
 
 rule "Respiratory rate is under minimum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(respiratoryRate < 12)
 	then
@@ -46,7 +48,7 @@ rule "Respiratory rate is under minimum value"
 end
 
 rule "Oxygen saturation is over maximum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(oxygenSaturation > 100)
 	then
@@ -54,7 +56,7 @@ rule "Oxygen saturation is over maximum value"
 end
 
 rule "Oxygen saturation is under minimum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(oxygenSaturation < 60)
 	then
@@ -62,7 +64,7 @@ rule "Oxygen saturation is under minimum value"
 end
 
 rule "Lymphocite count is over maximum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(lymphociteCount > 4800)
 	then
@@ -70,7 +72,7 @@ rule "Lymphocite count is over maximum value"
 end
 
 rule "Lymphocite count is under minimum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(lymphociteCount < 1000)
 	then
@@ -78,7 +80,7 @@ rule "Lymphocite count is under minimum value"
 end
 
 rule "Heart rate is over maximum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(heartRate > 150)
 	then
@@ -86,7 +88,7 @@ rule "Heart rate is over maximum value"
 end
 
 rule "Heart rate is under minimum value"
-	salience 90
+	salience 90 * myValue
 	when
 		$pr: PatientReport(heartRate < 80)
 	then
@@ -94,7 +96,7 @@ rule "Heart rate is under minimum value"
 end
 
 rule "Patient is healthy"
-	salience 80
+	salience 80 * myValue
 	when
 		$pr: PatientReport($exV: extremeValue)
 		eval($exV == 0)
@@ -105,7 +107,7 @@ rule "Patient is healthy"
 end
 
 rule "Patient is in critical condition"
-	salience 80
+	salience 80 * myValue
 	when
 		$pr: PatientReport($exV: extremeValue)
 		eval($exV <= 3 && $exV > 0)
@@ -115,7 +117,7 @@ rule "Patient is in critical condition"
 end
 
 rule "Patient is dead"
-	salience 80
+	salience 80 * myValue
 	when
 		$pr: PatientReport($exV: extremeValue)
 		eval($exV > 3)
