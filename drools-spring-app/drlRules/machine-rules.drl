@@ -10,7 +10,7 @@ rule "No new report in last 30 seconds!"
         eval(reportService.getPatientReportsNumber() != 0)
 	    not(
 	        PatientReport()
-	        over window:time(3s)
+	        over window:time(15s)
 	    )
     then
     	System.out.println("Machine is broken - sending an email");

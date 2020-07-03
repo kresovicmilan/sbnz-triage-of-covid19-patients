@@ -46,7 +46,7 @@ public class Patient implements Serializable{
 	private long id;
     
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column
+    @Column(name = "add_timestamp")
     private Date addTimestamp;
     
     @Column

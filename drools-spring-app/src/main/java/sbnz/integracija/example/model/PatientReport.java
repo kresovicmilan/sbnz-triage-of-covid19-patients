@@ -45,6 +45,8 @@ public class PatientReport implements Serializable {
 		this.heartRate = ThreadLocalRandom.current().nextDouble(80, 150);
 	}
 	
+	// ovaj zivi
+	// nece da radi kad prosledis id pa mora sa dva konstruktora
 	public PatientReport(Long pateintId, PatientReport pReport) {
 		super();
 		reportCondition = pReport.getReportCondition();
@@ -61,14 +63,23 @@ public class PatientReport implements Serializable {
 			this.lymphociteCount = ThreadLocalRandom.current().nextDouble(1000, 4800);
 			this.heartRate = ThreadLocalRandom.current().nextDouble(80, 150);
 		}
-		// ovaj umire
-		else {
-			this.temperature = pReport.getTemperature() + pReport.getTemperature() * 0.05;
-			this.respiratoryRate = pReport.getRespiratoryRate() + pReport.getRespiratoryRate() * 0.03;
-			this.oxygenSaturation = pReport.getOxygenSaturation() + pReport.getOxygenSaturation() * 0.05;
-			this.lymphociteCount = pReport.getLymphociteCount() + pReport.getLymphociteCount() + 0.1;
-			this.heartRate = pReport.getHeartRate() + pReport.getHeartRate() * 0.005;
+	}
+	
+	// ovaj umire
+	// nece da radi kad proseldis id pa mora sa dva konstruktora
+	public PatientReport(PatientReport pReport, Long patientId) {
+		super();
+		reportCondition = pReport.getReportCondition();
+		this.extremeValue = pReport.getExtremeValue();
+		if (this.extremeValue > 5) {
+			this.extremeValue = 5;
 		}
+		this.temperature = pReport.getTemperature() + pReport.getTemperature() * 0.05;
+		this.respiratoryRate = pReport.getRespiratoryRate() + pReport.getRespiratoryRate() * 0.03;
+		this.oxygenSaturation = pReport.getOxygenSaturation() + pReport.getOxygenSaturation() * 0.05;
+		this.lymphociteCount = pReport.getLymphociteCount() + pReport.getLymphociteCount() + 0.1;
+		this.heartRate = pReport.getHeartRate() + pReport.getHeartRate() * 0.005;
+		
 	}
 	
 	public PatientReport(double temperature, double respiratoryRate, double oxygenSaturation, double lymphociteCount,

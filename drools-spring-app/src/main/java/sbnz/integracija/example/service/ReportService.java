@@ -58,7 +58,7 @@ public class ReportService {
 		setMachineStatusChecker();
 	}
 	
-	@Scheduled(fixedDelay = 15000)
+	@Scheduled(fixedDelay = 5000)
 	private void probaSchedule() {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
@@ -106,12 +106,23 @@ public class ReportService {
 		int fired;
 		
 		patients = patientRepository.findAll();
+		
+		
 		for(Patient p : patients) {
 			if (!this.reports.containsKey(p.getId())) {
 				reports.put(p.getId(), new PatientReport(1));
 				System.out.println("\n---------------------\nMaking a new report\n---------------------\n");
 			} else {
-				reports.put(p.getId(), new PatientReport(p.getId(), reports.get(p.getId())));
+				// ovaj zivi
+				if (p.getId() % 2 == 0) {
+					System.out.println("OVAJ ZIVI PARAN BROJ ID");
+					reports.put(p.getId(), new PatientReport(2L, reports.get(p.getId())));
+				}
+				// ovaj umire
+				else {
+					System.out.println("OVAJ UMIRE NEPARAN BROJ ID");
+					reports.put(p.getId(), new PatientReport(reports.get(p.getId()), 1L));
+				}
 				System.out.println("\n---------------------\nChanging existing report\n---------------------\n");
 			}
 			
