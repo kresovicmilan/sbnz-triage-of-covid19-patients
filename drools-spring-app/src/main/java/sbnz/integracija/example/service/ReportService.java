@@ -58,7 +58,7 @@ public class ReportService {
 		setMachineStatusChecker();
 	}
 	
-	@Scheduled(fixedDelay = 40000)
+	@Scheduled(fixedDelay = 15000)
 	private void probaSchedule() {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
@@ -201,7 +201,7 @@ public class ReportService {
 		}
 	}
 	
-	@Scheduled(fixedDelay = 15000)
+	@Scheduled(fixedDelay = 5000)
 	private void checkIfMachineIsBroken() {
 		System.out.println("\n---------------------\nChecking if machine is broken");
 		int firedMachineStatus = this.machineKSession.fireAllRules();
