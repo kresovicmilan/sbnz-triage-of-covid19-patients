@@ -72,14 +72,16 @@ public class MyService {
 		for(File file : listOfFiles) {
 			if (file.isFile()) {
 				String fileName = file.getName();
-				try {
-					fis = new FileInputStream(s + "/drlRules/" + fileName);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (!fileName.equals("machine-rules.drl")) {
+					try {
+						fis = new FileInputStream(s + "/drlRules/" + fileName);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+							ks.getResources().newInputStreamResource(fis));
 				}
-				kfs.write("src/main/resources/sbnz/integracija/" + fileName,
-						ks.getResources().newInputStreamResource(fis));
 			}
 		}
 		
@@ -156,14 +158,16 @@ public class MyService {
 		for(File file : listOfFiles) {
 			if (file.isFile()) {
 				String fileName = file.getName();
-				try {
-					fis = new FileInputStream(s + "/drlRules/" + fileName);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (!fileName.equals("machine-rules.drl")) {
+					try {
+						fis = new FileInputStream(s + "/drlRules/" + fileName);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+							ks.getResources().newInputStreamResource(fis));
 				}
-				kfs.write("src/main/resources/sbnz/integracija/" + fileName,
-						ks.getResources().newInputStreamResource(fis));
 			}
 		}
 		

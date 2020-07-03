@@ -4,17 +4,6 @@ import sbnz.integracija.example.model.PatientReport;
 
 global java.lang.Integer myValue;
 
-/*rule "No new report in last 30 seconds!"
-	salience 100
-    when
-        not(
-            $pr: PatientReport()
-            over window:time(30s)
-        )
-    then
-        $pr.setReportCondition(PatientReport.ReportCondition.BROKEN_MACHINE);
-end*/
-
 rule "Temperature is over maximum value"
 	salience 90 * myValue
 	when

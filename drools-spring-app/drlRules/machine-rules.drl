@@ -1,0 +1,18 @@
+package sbnz.integracija;
+
+import sbnz.integracija.example.model.PatientReport;
+
+global sbnz.integracija.example.service.ReportService reportService;
+
+rule "No new report in last 30 seconds!"
+	salience 100
+    when
+        eval(reportService.getPatientReportsNumber() != 0)
+	    not(
+	        PatientReport()
+	        over window:time(5s)
+	    )
+    then
+    	System.out.println("Machine is broken - sending an email");
+    	reportService.machineIsBroken();
+end

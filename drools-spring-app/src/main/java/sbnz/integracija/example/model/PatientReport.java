@@ -1,5 +1,6 @@
 package sbnz.integracija.example.model;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.kie.api.definition.type.Expires;
@@ -7,9 +8,12 @@ import org.kie.api.definition.type.Role;
 
 @Role(Role.Type.EVENT)
 @Expires("1s")
-public class PatientReport {
+public class PatientReport implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public enum ReportCondition {
-		HEALTHY, CRITICAL, DEAD, BROKEN_MACHINE
+		HEALTHY, CRITICAL, DEAD
 	}
 	
 	private long patientId;
@@ -22,10 +26,11 @@ public class PatientReport {
 	private ReportCondition reportCondition;
 	
 	public PatientReport() {
-		
+		super();
 	}
 	
 	public PatientReport(int i) {
+		super();
 		reportCondition = ReportCondition.HEALTHY;
 		this.extremeValue = 0;
 		// min inclusive max exclusive
@@ -41,6 +46,7 @@ public class PatientReport {
 	}
 	
 	public PatientReport(Long pateintId, PatientReport pReport) {
+		super();
 		reportCondition = pReport.getReportCondition();
 		this.extremeValue = pReport.getExtremeValue();
 		if (this.extremeValue > 5) {
