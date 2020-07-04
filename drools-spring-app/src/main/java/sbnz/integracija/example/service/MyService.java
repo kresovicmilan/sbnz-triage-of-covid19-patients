@@ -140,6 +140,8 @@ public class MyService {
 		System.out.println("Country development level: " + p.getCountry().getCountryDevelopmentLevel().toString());
 		System.out.println("Number of rules fired: " + fired + "\n");
 		
+		countryRepository.save(p.getCountry());
+		
 		return new PatientDTO(p);
 
 	}
@@ -194,6 +196,8 @@ public class MyService {
 		System.out.println("Country IDVI index: " + c.getIdvIndex());
 		System.out.println("Country development level: " + c.getCountryDevelopmentLevel().toString());
 		System.out.println("Number of rules fired: " + fired + "\n");
+		
+		countryRepository.save(c);
 		return c;
 	}
 	
@@ -339,7 +343,7 @@ public class MyService {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		
-		long count = 0L;
+		long count = -7L;
 		try (Stream<Path> files = Files.list(Paths.get(s + "/drlRules"))) {
 		    count = files.count();
 		} catch (IOException e) {

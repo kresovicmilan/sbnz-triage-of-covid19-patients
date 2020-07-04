@@ -58,7 +58,7 @@ public class ReportService {
 		setMachineStatusChecker();
 	}
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 5000000)
 	private void probaSchedule() {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
@@ -146,7 +146,7 @@ public class ReportService {
 			System.out.println("Patient temperature after: " + reports.get(p.getId()).getTemperature());
 			System.out.println("Patient extreme value after: " + reports.get(p.getId()).getExtremeValue());
 		
-			if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL")) {
+			/*if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL")) {
 				try {
 					emailService.sendEmail("dervy97@mailinator.com", "Critical patient", "Patient is in critical condition");
 				} catch (MailException | MessagingException e) {
@@ -163,7 +163,7 @@ public class ReportService {
 					e.printStackTrace();
 				}
 				
-			}
+			}*/
 		}
 	}
 	
@@ -204,15 +204,15 @@ public class ReportService {
 	
 	public void machineIsBroken() {
 		System.out.println("\n---------------------\nSending an email to the doctor about the broken machine\n---------------------\n");
-		try {
+		/*try {
 			emailService.sendEmail("dervy97@mailinator.com", "Machine broken", "Machine broke down, check on patient and fix the machine");
 		} catch (MailException | MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 5000000)
 	private void checkIfMachineIsBroken() {
 		System.out.println("\n---------------------\nChecking if machine is broken");
 		int firedMachineStatus = this.machineKSession.fireAllRules();

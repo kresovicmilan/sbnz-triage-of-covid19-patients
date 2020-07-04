@@ -19,7 +19,7 @@ rule "High IDV index country"
 		update($c);
 end
 
-rule "Country has a patient that is COVID positive - LOW"
+/*rule "Country has a patient that is COVID positive - LOW"
 	no-loop true
 	when
 		$c: Country($patients: patient,
@@ -34,9 +34,26 @@ rule "Country has a patient that is COVID positive - LOW"
 							)
 	then
 		$c.setCovidPositive(true);
+end*/
+
+rule "Country has a patient that is COVID positive - LOW"
+	no-loop true
+	when
+		$c: Country($patients: patient,
+					covidPositive == false)
+		$pNumber: Integer() from accumulate(
+								Patient(
+									covidStatus == Patient.CovidStatus.POSITIVE
+								) from $patients,
+								sum(1)
+							)
+		eval($pNumber > 0)
+	then
+		System.out.println("Vrednost pnumber: " + $pNumber);
+		$c.setCovidPositive(true);
 end
 
-rule "Country has a patient that is COVID positive - HIGH"
+/*rule "Country has a patient that is COVID positive - HIGH"
 	no-loop true
 	when
 		$c: Country($patients: patient,
@@ -51,6 +68,22 @@ rule "Country has a patient that is COVID positive - HIGH"
 							)
 	then
 		$c.setCovidPositive(true);
+end*/
+rule "Country has a patient that is COVID positive - HIGH"
+	no-loop true
+	when
+		$c: Country($patients: patient,
+					covidPositive == false)
+		$pNumber: Integer() from accumulate(
+								Patient(
+									COVID19Positive == 1
+								) from $patients,
+								sum(1)
+							)
+		eval($pNumber > 0)
+	then
+		System.out.println("Vrednost pnumber: " + $pNumber);
+		$c.setCovidPositive(true);
 end
 
 rule "Country has been visited by a patient that is COVID positive - LOW"
@@ -58,14 +91,13 @@ rule "Country has been visited by a patient that is COVID positive - LOW"
 	when
 		$c: Country($pVisited: patientsVisited,
 					covidPositive == false)
-		Number(intValue > 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Patient(
 									covidStatus == Patient.CovidStatus.POSITIVE
 								) from $pVisited,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$c.setCovidPositive(true);
 end
@@ -75,14 +107,13 @@ rule "Country has been visited by a patient that is COVID positive - HIGH"
 	when
 		$c: Country($pVisited: patientsVisited,
 					covidPositive == false)
-		Number(intValue > 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Patient(
 									COVID19Positive == 1
 								) from $pVisited,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$c.setCovidPositive(true);
 end

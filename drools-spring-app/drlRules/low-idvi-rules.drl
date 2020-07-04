@@ -79,14 +79,13 @@ rule "Patient had contact with positive COVID19 case within last 14 days - reeva
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
 					coughOrFeverRisk == Patient.Risk.HIGH,
 					contactRisk != Patient.Risk.HIGH)
-		Number(intValue > 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Patient(
 									covidStatus == Patient.CovidStatus.POSITIVE
 								) from $patients,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$p.setContactRisk(Patient.Risk.HIGH);
 		$p.setCovidPositiveContact(true);
@@ -102,14 +101,13 @@ rule "Patient visited country that has covid cases - LOW"
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
 					coughOrFeverRisk == Patient.Risk.HIGH,
 					contactRisk != Patient.Risk.HIGH)
-		Number(intValue > 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Country(
 									covidPositive == true
 								) from $countries,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$p.setContactRisk(Patient.Risk.HIGH);
 		$p.addTreatmentMeasure("- Slucaj pod istragom- Izolacija");
@@ -139,14 +137,13 @@ rule "Patient didn't have contact with positive COVID19 case within last 14 days
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
 					coughOrFeverRisk == Patient.Risk.HIGH,
 					contactRisk != Patient.Risk.HIGH)
-		Number(intValue == 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Patient(
 									covidStatus == Patient.CovidStatus.POSITIVE
 								) from $patients,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$p.setContactRisk(Patient.Risk.LOW);
 		$p.addTreatmentMeasure("- Mali rizik COVID19");
@@ -161,14 +158,13 @@ rule "Patient didn't visited country that has covid cases - LOW"
 					country.countryDevelopmentLevel == Country.DevelompentLevel.LOW,
 					coughOrFeverRisk == Patient.Risk.HIGH,
 					contactRisk != Patient.Risk.HIGH)
-		Number(intValue == 0) from accumulate(
+		$intValue: Integer() from accumulate(
 								Country(
 									covidPositive == true
 								) from $countries,
-								init(int count = 0;),
-								action(count += 1;),
-								result(count)
+								sum(1)
 							)
+		eval($intValue > 0)
 	then
 		$p.setContactRisk(Patient.Risk.LOW);
 		$p.addTreatmentMeasure("- Mali rizik COVID19");

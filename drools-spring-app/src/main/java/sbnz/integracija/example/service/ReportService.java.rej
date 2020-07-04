@@ -1,9 +1,0 @@
-diff a/drools-spring-app/src/main/java/sbnz/integracija/example/service/ReportService.java b/drools-spring-app/src/main/java/sbnz/integracija/example/service/ReportService.java	(rejected hunks)
-@@ -58,6 +58,7 @@
- 		setMachineStatusChecker();
- 	}
- 	
-+	@Scheduled(fixedDelay = 15000)
- 	private void probaSchedule() {
- 		KieServices ks = KieServices.Factory.get();
- 		KieFileSystem kfs = ks.newKieFileSystem();
