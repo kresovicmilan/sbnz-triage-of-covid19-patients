@@ -2,12 +2,22 @@ package sbnz.integracija.tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
+import org.kie.api.KieBase;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
+import org.kie.api.builder.KieBuilder;
+import org.kie.api.builder.KieFileSystem;
+import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +45,8 @@ public class ApplicationTests {
 	// COUNTRY IDV INDEX TEST, COUNTRY HAS HIGH IDV INDEX
 	@Test
 	public void testCountry_HighIDVI() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+		
+		KieSession kSession =  setupConfig();
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -52,9 +61,8 @@ public class ApplicationTests {
 	// COUNTRY IDV INDEX TEST, COUNTRY HAS LOW IDV INDEX
 	@Test
 	public void testCountry_LowIDVI() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+		
+		KieSession kSession =  setupConfig();
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -71,9 +79,8 @@ public class ApplicationTests {
 	// Prijem u predvidjeno odeljenje za podrzavajucu negu
 	@Test
 	public void testClassifyPatientLowIdvIndex1() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+		
+		KieSession kSession =  setupConfig();
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -107,9 +114,8 @@ public class ApplicationTests {
 	// Razmotriti druge uzroke i ponoviti bris ako simptomi potraju 2 dana
 	@Test
 	public  void testClassifyPatientLowIdvIndex2() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+		
+		KieSession kSession =  setupConfig();
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -146,9 +152,9 @@ public class ApplicationTests {
 	// Mera 4 zbog dyspnea, moze biti i mera 5(ovaj ispis zbog provere)Mera 5, mora biti sa merom 3 ili 4(ovaj ispis zbog provere)
 	@Test
 	public void testClassifyPatientHighIdvIndex1() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+		
+		KieSession kSession =  setupConfig();
+
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -193,9 +199,8 @@ public class ApplicationTests {
 	// Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)
 	@Test
 	public void testClassifyPatientHighIdvIndex2() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks.getKieClasspathContainer();
-		KieSession kSession = kContainer.newKieSession();
+
+		KieSession kSession =  setupConfig();
 		
 		MyLogger ml = new MyLogger();
 		kSession.setGlobal("myLogger", ml);
@@ -241,5 +246,49 @@ public class ApplicationTests {
 		
 		assertEquals("Mera 1, mora biti samo mera 1(ovaj ispis zbog provere)", pHigh.getCuringMeasures());
 
+	}
+	
+	public KieSession setupConfig() {
+		KieServices ks = KieServices.Factory.get();
+		KieFileSystem kfs = ks.newKieFileSystem();
+		KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
+        kbconf.setOption(EventProcessingOption.STREAM);
+
+		// Adding admin created rules to session
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		FileInputStream fis = null;
+		// prodji kroz sve fileove u folderu
+		File folder = new File(s + "/drlRules");
+		File[] listOfFiles = folder.listFiles();
+		for(File file : listOfFiles) {
+			if (file.isFile()) {
+				String fileName = file.getName();
+				if (!fileName.equals("machine-rules.drl")) {
+					try {
+						fis = new FileInputStream(s + "/drlRules/" + fileName);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+							ks.getResources().newInputStreamResource(fis));
+				}
+			}
+		}
+		
+		
+		KieBuilder kb = ks.newKieBuilder(kfs);
+		kb.buildAll();
+		
+		
+		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
+		
+		
+		KieBase kbase = kContainer.newKieBase(kbconf);
+		//KieBase kieBase = kContainer.getKieBase();
+		//KieSession kieSession = kContainer.newKieSession();
+		KieSession kSession = kbase.newKieSession();
+		return kSession;
 	}
 }
