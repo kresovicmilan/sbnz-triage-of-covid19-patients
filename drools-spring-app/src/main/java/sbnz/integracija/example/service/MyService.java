@@ -112,6 +112,24 @@ public class MyService {
 		
 		countryRepository.save(p.getCountry());
 		
+		for (Country c : p.getCountriesVisited()) {
+			System.out.println("CHECKING AGAIN FOR COUNTRY VISITED WITH ID: " + c.getId());
+			kieSession.dispose();
+			//kieSession = kContainer.newKieSession();
+			kieSession =  setupConfig();
+			// ovu gore liniju dodao
+			kieSession.setGlobal("myLogger", ml);
+			kieSession.insert(c);
+			fired = kieSession.fireAllRules();
+			
+			System.out.println("Country: " + c.getCountryName());
+			System.out.println("Country IDVI index: " + c.getIdvIndex());
+			System.out.println("Country development level: " + c.getCountryDevelopmentLevel().toString());
+			System.out.println("Number of rules fired: " + fired + "\n");
+			
+			countryRepository.save(c);
+		}
+		
 		return new PatientDTO(p);
 
 	}
