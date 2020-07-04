@@ -57,42 +57,8 @@ public class MyService {
 	}
 	
 	public PatientDTO getCuringMeassures(PatientDTO pDTO) {
-		KieServices ks = KieServices.Factory.get();
-		KieFileSystem kfs = ks.newKieFileSystem();
-		KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
-        kbconf.setOption(EventProcessingOption.STREAM);
+		KieSession kieSession =  setupConfig();
 
-		// Adding admin created rules to session
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		FileInputStream fis = null;
-		// prodji kroz sve fileove u folderu
-		File folder = new File(s + "/drlRules");
-		File[] listOfFiles = folder.listFiles();
-		for(File file : listOfFiles) {
-			if (file.isFile()) {
-				String fileName = file.getName();
-				if (!fileName.equals("machine-rules.drl")) {
-					try {
-						fis = new FileInputStream(s + "/drlRules/" + fileName);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
-							ks.getResources().newInputStreamResource(fis));
-				}
-			}
-		}
-		
-		
-		KieBuilder kb = ks.newKieBuilder(kfs);
-		kb.buildAll();
-		
-		
-		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
-		KieBase kieBase = kContainer.getKieBase();
-		KieSession kieSession = kContainer.newKieSession();
 		
 		
 		Patient p = convertPatientDTOToPatient(pDTO);
@@ -116,7 +82,9 @@ public class MyService {
 		for (Patient pCheckAgain : p.getContactedPatients()) {
 			System.out.println("CHECKING AGAIN FOR PATIENT WITH ID: " + pCheckAgain.getId());
 			kieSession.dispose();
-			kieSession = kContainer.newKieSession();
+			//kieSession = kContainer.newKieSession();
+			kieSession =  setupConfig();
+			// ovu gore liniju dodao
 			kieSession.setGlobal("myLogger", ml);
 			kieSession.insert(pCheckAgain);
 			fired = kieSession.fireAllRules();
@@ -130,7 +98,9 @@ public class MyService {
 		
 		System.out.println("CHECKING AGAIN FOR COUNTRY WITH ID: " + p.getCountry().getId());
 		kieSession.dispose();
-		kieSession = kContainer.newKieSession();
+		//kieSession = kContainer.newKieSession();
+		kieSession =  setupConfig();
+		// ovu gore liniju dodao
 		kieSession.setGlobal("myLogger", ml);
 		kieSession.insert(p.getCountry());
 		fired = kieSession.fireAllRules();
@@ -147,39 +117,7 @@ public class MyService {
 	}
 	
 	public Country getCountryDevelopmentLevel(Country c) {
-		KieServices ks = KieServices.Factory.get();
-		KieFileSystem kfs = ks.newKieFileSystem();
-
-		// Adding admin created rules to session
-		Path currentRelativePath = Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		FileInputStream fis = null;
-		// prodji kroz sve fileove u folderu
-		File folder = new File(s + "/drlRules");
-		File[] listOfFiles = folder.listFiles();
-		for(File file : listOfFiles) {
-			if (file.isFile()) {
-				String fileName = file.getName();
-				if (!fileName.equals("machine-rules.drl")) {
-					try {
-						fis = new FileInputStream(s + "/drlRules/" + fileName);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
-							ks.getResources().newInputStreamResource(fis));
-				}
-			}
-		}
-		
-		KieBuilder kb = ks.newKieBuilder(kfs);
-		kb.buildAll();
-		
-		
-		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
-		KieBase kieBase = kContainer.getKieBase();
-		KieSession kieSession = kContainer.newKieSession();
+		KieSession kieSession =  setupConfig();
 		
 		
 		System.out.println("--- APPLYING RULES FOR COUNTRY ---");
@@ -365,5 +303,49 @@ public class MyService {
 		KieBuilder kb = ks.newKieBuilder(kfs);
 		kb.buildAll();
 		return true;
+	}
+	
+	public KieSession setupConfig() {
+		KieServices ks = KieServices.Factory.get();
+		KieFileSystem kfs = ks.newKieFileSystem();
+		KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
+        kbconf.setOption(EventProcessingOption.STREAM);
+
+		// Adding admin created rules to session
+		Path currentRelativePath = Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		FileInputStream fis = null;
+		// prodji kroz sve fileove u folderu
+		File folder = new File(s + "/drlRules");
+		File[] listOfFiles = folder.listFiles();
+		for(File file : listOfFiles) {
+			if (file.isFile()) {
+				String fileName = file.getName();
+				if (!fileName.equals("machine-rules.drl")) {
+					try {
+						fis = new FileInputStream(s + "/drlRules/" + fileName);
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					kfs.write("src/main/resources/sbnz/integracija/" + fileName,
+							ks.getResources().newInputStreamResource(fis));
+				}
+			}
+		}
+		
+		
+		KieBuilder kb = ks.newKieBuilder(kfs);
+		kb.buildAll();
+		
+		
+		KieContainer kContainer = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
+		
+		
+		KieBase kbase = kContainer.newKieBase(kbconf);
+		//KieBase kieBase = kContainer.getKieBase();
+		//KieSession kieSession = kContainer.newKieSession();
+		KieSession kSession = kbase.newKieSession();
+		return kSession;
 	}
 }
