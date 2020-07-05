@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 import sbnz.integracija.example.model.Patient;
 import sbnz.integracija.example.model.PatientReport;
+import sbnz.integracija.example.model.PatientReport.ReportCondition;
 import sbnz.integracija.example.repository.CountryRepository;
 import sbnz.integracija.example.repository.PatientRepository;
 import sbnz.integracija.example.util.MyLogger;
@@ -58,7 +59,7 @@ public class ReportService {
 		setMachineStatusChecker();
 	}
 	
-	@Scheduled(fixedDelay = 5000000)
+	@Scheduled(fixedDelay = 5000)
 	private void probaSchedule() {
 		KieServices ks = KieServices.Factory.get();
 		KieFileSystem kfs = ks.newKieFileSystem();
@@ -104,6 +105,8 @@ public class ReportService {
 		MyLogger ml = new MyLogger();
 		kieSession.setGlobal("myLogger", ml);
 		int fired;
+		boolean alreadyCritical;
+		boolean alreadyDead;
 		
 		patients = patientRepository.findAll();
 		
@@ -130,6 +133,17 @@ public class ReportService {
 			System.out.println("Patient report status before: " + reports.get(p.getId()).getReportCondition().toString());
 			System.out.println("Patient temperature before: " + reports.get(p.getId()).getTemperature());
 			System.out.println("Patient extreme value before: " + reports.get(p.getId()).getExtremeValue());
+			
+			alreadyCritical = false;
+			alreadyDead = false;
+			
+			if (reports.get(p.getId()).getReportCondition().equals(ReportCondition.CRITICAL)) {
+				alreadyCritical = true;
+			}
+			
+			if (reports.get(p.getId()).getReportCondition().equals(ReportCondition.DEAD)) {
+				alreadyDead = true;
+			}
 
 			kieSession.dispose();
 			//kieSession = kContainer.newKieSession();
@@ -146,7 +160,7 @@ public class ReportService {
 			System.out.println("Patient temperature after: " + reports.get(p.getId()).getTemperature());
 			System.out.println("Patient extreme value after: " + reports.get(p.getId()).getExtremeValue());
 		
-			/*if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL")) {
+			if (reports.get(p.getId()).getReportCondition().toString().equals("CRITICAL") && !alreadyCritical) {
 				try {
 					emailService.sendEmail("dervy97@mailinator.com", "Critical patient", "Patient is in critical condition");
 				} catch (MailException | MessagingException e) {
@@ -155,7 +169,7 @@ public class ReportService {
 				}
 				
 			}
-			else if (reports.get(p.getId()).getReportCondition().toString().equals("DEAD")) {
+			else if (reports.get(p.getId()).getReportCondition().toString().equals("DEAD") && !alreadyDead) {
 				try {
 					emailService.sendEmail("dervy97@mailinator.com", "Dead patient", "Patient is in dead condition");
 				} catch (MailException | MessagingException e) {
@@ -163,7 +177,7 @@ public class ReportService {
 					e.printStackTrace();
 				}
 				
-			}*/
+			}
 		}
 	}
 	
@@ -204,15 +218,15 @@ public class ReportService {
 	
 	public void machineIsBroken() {
 		System.out.println("\n---------------------\nSending an email to the doctor about the broken machine\n---------------------\n");
-		/*try {
+		try {
 			emailService.sendEmail("dervy97@mailinator.com", "Machine broken", "Machine broke down, check on patient and fix the machine");
 		} catch (MailException | MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
-	@Scheduled(fixedDelay = 5000000)
+	@Scheduled(fixedDelay = 5000)
 	private void checkIfMachineIsBroken() {
 		System.out.println("\n---------------------\nChecking if machine is broken");
 		int firedMachineStatus = this.machineKSession.fireAllRules();
