@@ -117,7 +117,7 @@ public class PatientDTO {
 		for (Patient p1 : p.getContactedPatients()) {
 			this.contactedPatients.add(p1.getId());
 		}
-		this.curingMeassures = "";
+		this.curingMeassures = p.getCuringMeasures();
 	}
 	
 	
